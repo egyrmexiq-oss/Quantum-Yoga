@@ -1,7 +1,37 @@
 import streamlit as st
-import google.generativeai as genai
+
+#import google.generativeai as genai
+
 import pandas as pd
 import streamlit.components.v1 as components
+
+# ==========================================
+# 2. CONEXIÓN NEURONAL (DEEPSEEK)
+# ==========================================
+API_URL = "https://api.deepseek.com/chat/completions"
+API_KEY = st.secrets["DEEPSEEK_API_KEY"]
+
+def deepseek_request(messages, model="deepseek-chat", temperature=0.7):
+    """Función genérica para llamar a DeepSeek con cualquier modelo."""
+    headers = {
+        "Authorization": f"Bearer {API_KEY}",
+        "Content-Type": "application/json"
+    }
+
+    payload = {
+        "model": model,
+        "messages": messages,
+        "temperature": temperature
+    }
+
+    response = requests.post(API_URL, headers=headers, json=payload)
+
+    if response.status_code != 200:
+        raise Exception(f"DeepSeek Error: {response.text}")
+
+    data = response.json()
+    return data["choices"][0]["message"]["content"]
+
 
 # ==========================================
 # ⚙️ CONFIGURACIÓN DE PÁGINA (AMBIENTE ZEN)
