@@ -120,7 +120,7 @@ with st.sidebar:
     if st.button("🔒 Salir"): st.session_state.usuario_activo = None; st.rerun()
 
     st.markdown("---")
-    st.markdown("### 🛋️ Encuentra Psicólogo")
+    st.markdown("### 🛋️ Encuentra Instructor/a")
     if TODOS_LOS_PSICOLOGOS:
         filtro = st.selectbox("📍 Ciudad:", ciudades)
         lista = TODOS_LOS_PSICOLOGOS if filtro == "Todas las Ubicaciones" else [m for m in TODOS_LOS_PSICOLOGOS if str(m.get('ciudad')).title() == filtro]
@@ -129,7 +129,7 @@ with st.sidebar:
             if "idx" not in st.session_state: st.session_state.idx = 0
             m = lista[st.session_state.idx % len(lista)]
             
-            # Tarjeta de Psicólogo (Estilo más suave, color Morado/Lila)
+            # Tarjeta de Instructora (Estilo más suave, color Morado/Lila)
             tarjeta = (
                 f'<div style="background-color: #2e1a47; padding: 15px; border-radius: 10px; border: 1px solid #5a3e7d; margin-bottom: 10px;">'
                 f'<h4 style="margin:0; color:white;">{m.get("nombre","Lic.")}</h4>'
