@@ -7,7 +7,7 @@ import streamlit.components.v1 as components
 # ⚙️ CONFIGURACIÓN DE PÁGINA (AMBIENTE ZEN)
 # ==========================================
 # Cambié el icono por un cerebro 🧠 y el título
-st.set_page_config(page_title="Quantum Yoga", page_icon="🧘", layout="wide")
+st.set_page_config(page_title="Quantum Yoga 🧘", page_icon="🧘", layout="wide")
 
 # ==========================================
 # 🔐 1. LOGIN (Igual que la otra App)
