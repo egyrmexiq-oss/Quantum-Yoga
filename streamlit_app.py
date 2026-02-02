@@ -15,7 +15,7 @@ st.set_page_config(page_title="Quantum Yoga 🧘", page_icon="🧘", layout="wid
 if "usuario_activo" not in st.session_state: st.session_state.usuario_activo = None
 
 if not st.session_state.usuario_activo:
-    st.markdown("## 🔐 Quantum Yoga")
+    st.markdown("## 🔐 Quantum Yoga 🧘")
     # Animación diferente (más calmada si quieres, o la misma)
     try: st.components.v1.iframe("https://my.spline.design/claritystream-Vcf5uaN9MQgIR4VGFA5iU6Es/", height=400)
     except: pass
