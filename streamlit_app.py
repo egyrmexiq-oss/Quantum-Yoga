@@ -153,12 +153,12 @@ with st.sidebar:
 # ==========================================
 
 # Título más suave
-st.markdown('<h1 style="text-align: center; color: #E0B0FF;">Quantum Mind</h1>', unsafe_allow_html=True)
+st.markdown('<h1 style="text-align: center; color: #E0B0FF;">Quantum Yoga</h1>', unsafe_allow_html=True)
 st.caption("Espacio seguro de escucha y orientación con IA")
 
 if "mensajes" not in st.session_state: 
     # Saludo inicial diferente
-    st.session_state.mensajes = [{"role": "assistant", "content": "Hola. Soy Quantum Mind. Este es un espacio seguro. ¿Qué hay en tu mente hoy?"}]
+    st.session_state.mensajes = [{"role": "assistant", "content": "Hola. Soy Quantum Yoga. Este es un espacio seguro. ¿Qué hay en tu mente hoy?"}]
 
 for msg in st.session_state.mensajes:
     with st.chat_message(msg["role"]): st.markdown(msg["content"])
