@@ -114,7 +114,7 @@ with st.sidebar:
     st.markdown("---")
     st.markdown("### ⚙️ Preferencias")
     # Cambié los niveles para que sean más humanos
-    nivel = st.radio("Profundidad:", ["Escucha Breve", "Apoyo Emocional", "Orientación Teórica"])
+    nivel = st.radio("Profundidad:", ["Entrenamiento Breve", "Entrenamiento Medio", "Entrenamiento Avanzado"])
     
     if st.button("🍃 Nueva Sesión"): st.session_state.mensajes = []; st.rerun()
     if st.button("🔒 Salir"): st.session_state.usuario_activo = None; st.rerun()
