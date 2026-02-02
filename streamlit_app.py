@@ -158,7 +158,7 @@ st.caption("Espacio de practica y orientación basado en IA")
 
 if "mensajes" not in st.session_state: 
     # Saludo inicial diferente
-    st.session_state.mensajes = [{"role": "assistant", "content": "Hola. Soy Quantum Yoga. Este es un espacio seguro. ¿Qué hay en tu mente hoy?"}]
+    st.session_state.mensajes = [{"role": "assistant", "content": "Hola. Soy Quantum Yoga. Este es un espacio de practica y orientacion de YOGA. ¿Qué quieres practicar hoy?"}]
 
 for msg in st.session_state.mensajes:
     with st.chat_message(msg["role"]): st.markdown(msg["content"])
