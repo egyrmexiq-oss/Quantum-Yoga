@@ -59,64 +59,66 @@ if not st.session_state.usuario_activo:
 # ==========================================
 # 🎨 ESTILO VISUAL (CSS) - BLOQUE MAESTRO
 # ==========================================
+# ==========================================
+# 🎨 ESTILO VISUAL (CSS) - FINAL Y CORREGIDO
+# ==========================================
     st.markdown("""
     <style>
-    /* 1. FONDO PRINCIPAL - Verde Menta Suave */
-    .stApp {
-        background-color: #E8F5E9 !important;
-    }
+    /* 1. FONDO PRINCIPAL */
+    .stApp { background-color: #E8F5E9 !important; }
 
-    /* 2. BARRA LATERAL - Verde Bosque Oscuro */
-    [data-testid="stSidebar"] {
-        background-color: #344E41 !important;
-    }
-    
-    /* 3. TEXTO DE LA BARRA LATERAL */
-    [data-testid="stSidebar"] * {
-        color: #DAD7CD !important;
-    }
+    /* 2. BARRA LATERAL */
+    [data-testid="stSidebar"] { background-color: #344E41 !important; }
+    [data-testid="stSidebar"] * { color: #DAD7CD !important; }
 
-    /* 4. TEXTO GENERAL - Verde Oscuro */
-    .stApp, .stMarkdown, h1, h2, h3, p, li, label {
-        color: #1B4D3E !important;
-    }
+    /* 3. TEXTO GENERAL */
+    .stApp, .stMarkdown, h1, h2, h3, p, li, label { color: #1B4D3E !important; }
 
-    /* 5. BOTONES - Estilo Zen */
+    /* 4. BOTONES */
     div.stButton > button {
         background-color: #588157 !important;
         color: white !important;
         border-radius: 20px;
         border: none;
     }
+
+    /* 5. LOGINS Y MÁRGENES */
+    .block-container { padding-top: 2rem !important; padding-bottom: 2rem !important; }
+    [data-testid="stImage"] img { border-radius: 15px; }
+
+    /* 6. CORRECCIÓN DE FRANJAS */
+    header[data-testid="stHeader"] { background-color: #E8F5E9 !important; }
+    div[data-testid="stBottom"] { background-color: #E8F5E9 !important; }
+
+    /* --- 🚨 11. RECUPERACIÓN DEL INPUT DE CHAT (NIVEL EXPERTO) 🚨 --- */
     
-    /* 6. INPUT DE CHAT (Zona inferior) */
+    /* A. El contenedor flotante inferior */
     .stChatFloatingInputContainer {
-        background-color: #E8F5E9 !important;
+        background-color: #E8F5E9 !important; /* Mismo verde que el fondo */
+        bottom: 20px !important;
     }
 
-    /* 7. AJUSTES DE LOGIN (Márgenes y Bordes) */
-    .block-container {
-        padding-top: 2rem !important;
-        padding-bottom: 2rem !important;
-    }
-    [data-testid="stImage"] img {
-        border-radius: 15px;
-    }
-
-    /* --- 🚨 ZONA DE CORRECCIÓN DE FRANJAS NEGRAS 🚨 --- */
-
-    /* 9. PINTAR LA BARRA SUPERIOR (Donde sale el menú hamburguesa) */
-    header[data-testid="stHeader"] {
-        background-color: #E8F5E9 !important;
+    /* B. La caja específica del input (Borde y Fondo) */
+    div[data-testid="stChatInput"] {
+        background-color: #FFFFFF !important; /* BLANCO PURO */
+        border: 2px solid #344E41 !important; /* Borde Verde Oscuro para verlo bien */
+        border-radius: 15px !important;
+        padding: 5px !important;
     }
 
-    /* 10. ELIMINAR BORDES O FONDOS OSCUROS RESIDUALES */
-    div[data-testid="stBottom"] {
-        background-color: #E8F5E9 !important;
+    /* C. El texto que escribes dentro */
+    div[data-testid="stChatInput"] textarea {
+        background-color: #FFFFFF !important;
+        color: #000000 !important; /* Texto NEGRO */
+        caret-color: #000000 !important; /* Cursor NEGRO */
+    }
+
+    /* D. El botón de enviar (flechita) */
+    div[data-testid="stChatInput"] button {
+        color: #344E41 !important;
     }
     </style>
     """, unsafe_allow_html=True)
-
 # ==========================================
 # 💎 2. CONEXIÓN (AQUÍ PONES LA NUEVA HOJA)
 # ==========================================
