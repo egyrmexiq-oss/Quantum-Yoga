@@ -53,25 +53,69 @@ if "usuario_activo" not in st.session_state: st.session_state.usuario_activo = N
 
 if not st.session_state.usuario_activo:
     # Reemplaza el título viejo por esto:
-    st.markdown('<h3 style="text-align: center; color: #556B2F;">Tu santuario personal de equilibrio</h3>', unsafe_allow_html=True)
-    # Animación diferente (más calmada si quieres, o la misma)
-    try: st.image("https://images.unsplash.com/photo-1545205597-3d9d02c29597?q=80&w=2070&auto=format&fit=crop", use_container_width=True)
-    except: pass
+    # ==========================================
+# 🎨 ESTILO VISUAL (CSS) - BLOQUE ÚNICO
+# ==========================================
+# ==========================================
+# 🎨 ESTILO VISUAL (CSS) - BLOQUE MAESTRO
+# ==========================================
+    st.markdown("""
+    <style>
+    /* 1. FONDO PRINCIPAL - Verde Menta Suave */
+    .stApp {
+        background-color: #E8F5E9 !important;
+    }
+
+    /* 2. BARRA LATERAL - Verde Bosque Oscuro */
+    [data-testid="stSidebar"] {
+        background-color: #344E41 !important;
+    }
     
-    # Música relajante (Piano/Ambient)
-    st.audio("https://cdn.pixabay.com/audio/2022/05/27/audio_1808fbf07a.mp3", loop=True, autoplay=True)
+    /* 3. TEXTO DE LA BARRA LATERAL */
+    [data-testid="stSidebar"] * {
+        color: #DAD7CD !important;
+    }
+
+    /* 4. TEXTO GENERAL - Verde Oscuro */
+    .stApp, .stMarkdown, h1, h2, h3, p, li, label {
+        color: #1B4D3E !important;
+    }
+
+    /* 5. BOTONES - Estilo Zen */
+    div.stButton > button {
+        background-color: #588157 !important;
+        color: white !important;
+        border-radius: 20px;
+        border: none;
+    }
     
-    st.info("🔑 Clave de Acceso para Invitados: **DEMO**")
-    
-    c = st.text_input("Clave de Acceso:", type="password")
-    if st.button("Entrar a Sesión"):
-        #if c.strip() == "DEMO" or (c.strip() in st.secrets["access_keys"]):
-        if c.strip() in st.secrets["access_keys"]:
-            nombre = "Visitante" if c.strip() == "DEMO" else st.secrets["access_keys"][c.strip()]
-            st.session_state.usuario_activo = nombre
-            st.rerun()
-        else: st.error("Acceso Denegado")
-    st.stop()
+    /* 6. INPUT DE CHAT (Zona inferior) */
+    .stChatFloatingInputContainer {
+        background-color: #E8F5E9 !important;
+    }
+
+    /* 7. AJUSTES DE LOGIN (Márgenes y Bordes) */
+    .block-container {
+        padding-top: 2rem !important;
+        padding-bottom: 2rem !important;
+    }
+    [data-testid="stImage"] img {
+        border-radius: 15px;
+    }
+
+    /* --- 🚨 ZONA DE CORRECCIÓN DE FRANJAS NEGRAS 🚨 --- */
+
+    /* 9. PINTAR LA BARRA SUPERIOR (Donde sale el menú hamburguesa) */
+    header[data-testid="stHeader"] {
+        background-color: #E8F5E9 !important;
+    }
+
+    /* 10. ELIMINAR BORDES O FONDOS OSCUROS RESIDUALES */
+    div[data-testid="stBottom"] {
+        background-color: #E8F5E9 !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
 
 # ==========================================
 # 💎 2. CONEXIÓN (AQUÍ PONES LA NUEVA HOJA)
