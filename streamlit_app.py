@@ -53,7 +53,7 @@ if "usuario_activo" not in st.session_state: st.session_state.usuario_activo = N
 
 if not st.session_state.usuario_activo:
     # Reemplaza el título viejo por esto:
-st.markdown('<h3 style="text-align: center; color: #556B2F;">Tu santuario personal de equilibrio</h3>', unsafe_allow_html=True)
+    st.markdown('<h3 style="text-align: center; color: #556B2F;">Tu santuario personal de equilibrio</h3>', unsafe_allow_html=True)
     # Animación diferente (más calmada si quieres, o la misma)
     try: st.components.v1.iframe("https://my.spline.design/claritystream-Vcf5uaN9MQgIR4VGFA5iU6Es/", height=400)
     except: pass
