@@ -12,49 +12,46 @@ st.set_page_config(page_title="Quantum Yoga 🧘", page_icon="🧘", layout="wid
 # Coloca esto justo debajo de st.set_page_config
 st.markdown("""
     <style>
-    /* 1. Fondo Principal Verde Pastel Suave */
+    /* 1. Fondo de Pantalla Verde Matcha Pastel (Diferente al Sidebar) */
     .stApp {
-        background-color: #F1F5E9; 
+        background-color: #F0F4EF !important; 
     }
 
-    /* 2. Forzar que TODO el texto sea Gris Oscuro/Bosque (Legibilidad) */
+    /* 2. Forzar Visibilidad de Texto (Gris Carbón para legibilidad) */
     .stApp, .stMarkdown, p, li, label, .stChatMessage {
         color: #2D3E2F !important;
     }
 
-    /* 3. Títulos en Verde Bosque Profundo */
+    /* 3. Títulos en Verde Bosque Intenso */
     h1, h2, h3, h4 {
         color: #3A5A40 !important;
     }
 
-    /* 4. BOTONES: Fondo Verde Wendy y Texto Blanco siempre visible */
+    /* 4. BOTONES: Fondo Verde Wendy y Texto Blanco FIJO */
     div.stButton > button {
         background-color: #588157 !important;
-        color: white !important;
-        border-radius: 25px !important;
-        border: none !important;
-        padding: 0.5rem 2rem !important;
-        font-weight: bold !important;
+        color: #FFFFFF !important; /* Blanco puro siempre */
+        border-radius: 20px !important;
+        border: 2px solid #588157 !important;
+        transition: all 0.3s ease;
     }
 
-    /* 5. EFECTO HOVER: Cuando pasas el mouse, se aclara un poco el verde */
+    /* 5. HOVER: El botón se vuelve más claro pero el texto sigue siendo visible */
     div.stButton > button:hover {
         background-color: #A3B18A !important;
         color: #2D3E2F !important;
-        border: 1px solid #588157 !important;
+        border: 2px solid #588157 !important;
     }
 
-    /* 6. Caja de Chat y Inputs */
+    /* 6. Ajuste de la Caja de Chat para que no desentone */
     .stChatFloatingInputContainer {
-        background-color: #F1F5E9 !important;
+        background-color: #F0F4EF !important;
     }
     
-    /* 7. Barra Lateral (Sidebar) con contraste */
-    [data-testid="stSidebar"] {
-        background-color: #344E41 !important;
-    }
-    [data-testid="stSidebar"] * {
-        color: #DAD7CD !important;
+    /* 7. Texto del Chat (Burbujas) */
+    [data-testid="stChatMessage"] {
+        background-color: rgba(255, 255, 255, 0.5);
+        border-radius: 15px;
     }
     </style>
     """, unsafe_allow_html=True)
