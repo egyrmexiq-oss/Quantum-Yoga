@@ -185,20 +185,4 @@ with st.sidebar:
 st.caption("Espacio de práctica y orientación basado en IA")
 
 if "mensajes" not in st.session_state: 
-    # Saludo inicial diferente
-    st.session_state.mensajes = [{"role": "assistant", "content": "Hola. Soy Quantum Yoga. Este es un espacio de práctica y orientacion de YOGA. ¿Qué quieres hacer hoy?"}]
-
-for msg in st.session_state.mensajes:
-    with st.chat_message(msg["role"]): st.markdown(msg["content"])
-
-if prompt := st.chat_input("Cuéntame cómo te sientes..."):
-    st.session_state.mensajes.append({"role": "user", "content": prompt})
-    st.chat_message("user").markdown(prompt)
-    
-    try:
-        full_prompt = f"Eres Quantum Mind (Modo: {nivel}). {INSTRUCCION_EXTRA}. Usuario dice: {prompt}."
-        # Usamos el modelo rápido 2.5 o Pro
-        res = genai.GenerativeModel('gemini-2.5-flash').generate_content(full_prompt)
-        st.session_state.mensajes.append({"role": "assistant", "content": res.text})
-        st.rerun()
-    except Exception as e: st.error(f"Error de conexión: {e}")
+    st.session_state.mensajes = [{"role": "assistant", "content": "¡Namasté! Soy Wellness Flow. Estoy aquí para guiar tu práctica de yoga y respiración. ¿Cómo se siente tu cuerpo hoy?"}]
