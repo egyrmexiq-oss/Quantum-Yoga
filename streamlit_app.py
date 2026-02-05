@@ -8,7 +8,13 @@ import streamlit.components.v1 as components
 # ==========================================
 # Cambié el icono por un cerebro 🧠 y el título
 st.set_page_config(page_title="Quantum Yoga 🧘", page_icon="🧘", layout="wide")
-
+st.markdown("""
+    <style>
+    .stApp { background-color: #F8F9F5; } /* Fondo Hueso/Zen */
+    h1, h2, h3 { color: #556B2F !important; } /* Verde Oliva */
+    .stChatFloatingInputContainer { background-color: #F8F9F5; }
+    </style>
+    """, unsafe_allow_html=True)
 # ==========================================
 # 🔐 1. LOGIN (Igual que la otra App)
 # ==========================================
