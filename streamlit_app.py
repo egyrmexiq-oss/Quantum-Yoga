@@ -12,46 +12,37 @@ st.markdown('<h1 style="text-align: center;">Wellness’s Flow 🌿</h1>', unsaf
 # Coloca esto justo debajo de st.set_page_config
 st.markdown("""
     <style>
-    /* 1. Fondo de Pantalla Verde Matcha Pastel (Diferente al Sidebar) */
+    /* 1. EL FONDO PRINCIPAL (DERECHA) - Verde Menta Suave */
     .stApp {
-        background-color: #F0F4EF !important; 
+        background-color: #E8F5E9 !important;
     }
 
-    /* 2. Forzar Visibilidad de Texto (Gris Carbón para legibilidad) */
-    .stApp, .stMarkdown, p, li, label, .stChatMessage {
-        color: #2D3E2F !important;
-    }
-
-    /* 3. Títulos en Verde Bosque Intenso */
-    h1, h2, h3, h4 {
-        color: #3A5A40 !important;
-    }
-
-    /* 4. BOTONES: Fondo Verde Wendy y Texto Blanco FIJO */
-    div.stButton > button {
-        background-color: #588157 !important;
-        color: #FFFFFF !important; /* Blanco puro siempre */
-        border-radius: 20px !important;
-        border: 2px solid #588157 !important;
-        transition: all 0.3s ease;
-    }
-
-    /* 5. HOVER: El botón se vuelve más claro pero el texto sigue siendo visible */
-    div.stButton > button:hover {
-        background-color: #A3B18A !important;
-        color: #2D3E2F !important;
-        border: 2px solid #588157 !important;
-    }
-
-    /* 6. Ajuste de la Caja de Chat para que no desentone */
-    .stChatFloatingInputContainer {
-        background-color: #F0F4EF !important;
+    /* 2. LA BARRA LATERAL (IZQUIERDA) - Verde Bosque (El que te gustaba) */
+    [data-testid="stSidebar"] {
+        background-color: #344E41 !important;
     }
     
-    /* 7. Texto del Chat (Burbujas) */
-    [data-testid="stChatMessage"] {
-        background-color: rgba(255, 255, 255, 0.5);
-        border-radius: 15px;
+    /* 3. TEXTO DE LA BARRA LATERAL - Color Arena/Crema para contraste */
+    [data-testid="stSidebar"] * {
+        color: #DAD7CD !important;
+    }
+
+    /* 4. TEXTO GENERAL DE LA PANTALLA - Verde Oscuro para leer bien */
+    .stApp, .stMarkdown, h1, h2, h3, p, li, label {
+        color: #1B4D3E !important;
+    }
+
+    /* 5. BOTONES - Verde Medio con Texto Blanco */
+    div.stButton > button {
+        background-color: #588157 !important;
+        color: white !important;
+        border-radius: 20px;
+        border: none;
+    }
+    
+    /* 6. INPUT DE CHAT - Para que no se vea blanco brillante */
+    .stChatFloatingInputContainer {
+        background-color: #E8F5E9 !important;
     }
     </style>
     """, unsafe_allow_html=True)
