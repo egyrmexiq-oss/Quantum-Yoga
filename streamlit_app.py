@@ -49,23 +49,50 @@ st.markdown("""
 # ==========================================
 # 🔐 1. LOGIN (Igual que la otra App)
 # ==========================================
-if "usuario_activo" not in st.session_state: st.session_state.usuario_activo = None
+# ... (Tus imports y configuraciones CSS van arriba) ...
 
-if not st.session_state.usuario_activo:
-    # Reemplaza el título viejo por esto:
+# ==========================================
+# 🚪 LÓGICA DE CONTROL DE ACCESO
+# ==========================================
+if "usuario_activo" not in st.session_state:
+    # --- PANTALLA DE LOGIN (Si no ha entrado) ---
+    
+    # Imagen Panorámica
+    st.image("https://images.unsplash.com/photo-1545205597-3d9d02c29597?q=80&w=2000&h=800&auto=format&fit=crop", use_container_width=True)
+    
+    st.markdown('<h1 style="text-align: center;">Wellness’s Flow 🌿</h1>', unsafe_allow_html=True)
+    st.markdown('<h3 style="text-align: center;">Tu santuario personal de equilibrio</h3>', unsafe_allow_html=True)
+    
+    # Campo de contraseña
+    clave_input = st.text_input("Clave de Acceso:", type="password")
+    
+    if st.button("Entrar a Sesión"):
+        if clave_input == "DEMO" or clave_input == st.secrets["CLAVE_MAESTRA"]: # Ajusta según tu clave
+            st.session_state.usuario_activo = "Invitado"
+            st.rerun() # <--- Recarga para entrar a la app
+        else:
+            st.error("Clave incorrecta. Respira e intenta de nuevo.")
+            
+    st.stop() # 🛑 ¡IMPORTANTE! Esto detiene el código aquí para que NO cargue el chat abajo.
+
+else:
     # ==========================================
-# 🎨 ESTILO VISUAL (CSS) - BLOQUE ÚNICO
-# ==========================================
-# ==========================================
-# 🎨 ESTILO VISUAL (CSS) - BLOQUE MAESTRO
-# ==========================================
-# ==========================================
-# 🎨 ESTILO VISUAL (CSS) - FINAL Y CORREGIDO
-# ==========================================
+    # 🧘 PANTALLA PRINCIPAL (APP)
+    # ==========================================
+    # (Aquí va TODO el resto: Barra lateral, Chat, PDF, etc.)
+    
+    with st.sidebar:
+        # ... Tu código de barra lateral ...
+        if st.button("🔒 Salir"):
+            del st.session_state["usuario_activo"]
+            st.rerun()
+
+    # ... Tu lógica de Chat y Mensajes ...
+    # (Asegúrate de que todo el código del chat esté identado dentro de este 'else')
     # ==========================================
 # 🎨 ESTILO VISUAL (CSS) - ARMONIZACIÓN TOTAL
 # ==========================================
-   st.markdown("""
+    st.markdown("""
     <style>
     /* 1. FONDO PRINCIPAL */
     .stApp { background-color: #E8F5E9 !important; }
@@ -198,7 +225,7 @@ with st.sidebar:
     nivel = st.radio("Entrenamiento:", ["Basico", "Medio", "Avanzado"])
     
     if st.button("🍃 Nueva Sesión"): st.session_state.mensajes = []; st.rerun()
-    if st.button("🔒 Salir"): st.session_state.usuario_activo = None; st.rerun()
+    #if st.button("🔒 Salir"): st.session_state.usuario_activo = None; st.rerun()
 
     st.markdown("---")
     st.markdown("### 🛋️ Encuentra Instructor/a")
