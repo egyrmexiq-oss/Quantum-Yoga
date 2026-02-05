@@ -4,6 +4,17 @@ import pandas as pd
 import streamlit.components.v1 as components
 
 # ==========================================
+# 🏗️ INICIALIZACIÓN DE ESTADO (PEGAR AL INICIO)
+# ==========================================
+if "mensajes" not in st.session_state:
+    st.session_state.mensajes = []
+
+if "usuario_activo" not in st.session_state:
+    # Esto evita errores si intentas acceder al usuario antes del login
+    # Pero no te loguea automáticamente, solo reserva el espacio.
+    pass
+
+# ==========================================
 # ⚙️ CONFIGURACIÓN DE PÁGINA (AMBIENTE ZEN)
 # ==========================================
 # Cambié el icono por un cerebro 🧠 y el título
@@ -207,55 +218,67 @@ TUS TAREAS:
 # 🧘 3. INTERFAZ ZEN (BARRA LATERAL)
 # ==========================================
 with st.sidebar:
-    st.header("🧘 Wellness Flow")
-    st.caption("By Wendy Gtz. Nielsen")
-    st.success(f"Namasté, {st.session_state.usuario_activo}")
-    
-    # ... (Tu contador de alumnos está excelente) ...
-
-    st.markdown("---")
-    st.markdown("### 🕊️ Intención del Día")
-    st.info("La práctica de hoy se enfoca en la apertura y la gratitud.")
-    
-    # Eliminamos la sección de "Encuentra Psicólogo" y dejamos espacio para el futuro
-    
-    st.markdown("---")
-    st.markdown("### ⚙️ Preferencias")
-    # Cambié los niveles para que sean más humanos
-    nivel = st.radio("Entrenamiento:", ["Basico", "Medio", "Avanzado"])
-    
-    if st.button("🍃 Nueva Sesión"): st.session_state.mensajes = []; st.rerun()
-    if st.button("🔒 Salir"): st.session_state.usuario_activo = None; st.rerun()
-
-    st.markdown("---")
-    st.markdown("### 🛋️ Encuentra Instructor/a")
-    if TODOS_LOS_PSICOLOGOS:
-        filtro = st.selectbox("📍 Ciudad:", ciudades)
-        lista = TODOS_LOS_PSICOLOGOS if filtro == "Todas las Ubicaciones" else [m for m in TODOS_LOS_PSICOLOGOS if str(m.get('ciudad')).title() == filtro]
+        # 1. ENCABEZADO
+        st.header("🧘 Wellness Flow")
+        st.caption("By Wendy Gtz. Nielsen")
+        st.success(f"Namasté, {st.session_state.usuario_activo}")
         
-        if lista:
-            if "idx" not in st.session_state: st.session_state.idx = 0
-            m = lista[st.session_state.idx % len(lista)]
-            
-            # Tarjeta de Instructora (Estilo más suave, color Morado/Lila)
-            tarjeta = (
-                f'<div style="background-color: #2e1a47; padding: 15px; border-radius: 10px; border: 1px solid #5a3e7d; margin-bottom: 10px;">'
-                f'<h4 style="margin:0; color:white;">{m.get("nombre","Lic.")}</h4>'
-                f'<div style="color:#E0B0FF; font-weight:bold;">{m.get("especialidad")}</div>' # Color Lavanda
-                f'<small style="color:#ccc;">{m.get("ciudad")}</small>'
-                f'<div style="font-size: 0.9em; margin-top: 5px; color: white;">📞 {m.get("telefono","--")}</div>'
-                f'</div>'
-            )
-            st.markdown(tarjeta, unsafe_allow_html=True)
-            
-            c1, c2 = st.columns(2)
-            if c1.button("⬅️"): st.session_state.idx -= 1; st.rerun()
-            if c2.button("➡️"): st.session_state.idx += 1; st.rerun()
-        else: st.info("No hay especialistas en esta zona aún.")
+        st.markdown("---")
 
-    st.markdown("---")
-    st.link_button("📝 Soy Psicólogo/a", URL_FORMULARIO)
+        # 2. PREFERENCIAS
+        st.markdown("### ⚙️ Preferencias")
+        nivel = st.radio("Entrenamiento:", ["Basico", "Medio", "Avanzado"])
+        
+        # 3. CONTROLES DE SESIÓN
+        if st.button("🍃 Nueva Sesión"): 
+            st.session_state.mensajes = []
+            st.rerun()
+            
+        # El botón de salir corregido que ya funcionaba
+        if st.button("🔒 Salir"):
+            del st.session_state["usuario_activo"]
+            st.rerun()
 
+        st.markdown("---")
+
+        # 4. 📥 BOTÓN DE DESCARGA PDF (El Rescate)
+        # Solo aparece si hay mensajes en el chat
+        if st.session_state.mensajes:
+            try:
+                # Generamos el PDF usando la función que ya tienes arriba
+                pdf_bytes = generar_pdf_yoga(st.session_state.usuario_activo, st.session_state.mensajes)
+                b64 = base64.b64encode(pdf_bytes).decode()
+                
+                # Botón con estilo personalizado
+                href = f'''
+                <a href="data:application/octet-stream;base64,{b64}" download="Rutina_Yoga_{st.session_state.usuario_activo}.pdf" 
+                style="text-decoration:none; color: #1B4D3E; background-color: #DAD7CD; 
+                padding: 10px; border-radius: 10px; display: block; text-align: center; border: 1px solid #588157;">
+                📥 <b>Descargar Rutina PDF</b>
+                </a>
+                '''
+                st.markdown(href, unsafe_allow_html=True)
+            except Exception as e:
+                st.error("Escribe algo en el chat para habilitar el PDF.")
+        else:
+            st.caption("Inicia tu práctica para descargar la rutina.")
+
+        st.markdown("---")
+
+        # 5. 🧘 SECCIÓN DE INSTRUCTORES (Limpia y lista para tus enlaces)
+        st.markdown("### 🧘 Encuentra Instructor/a")
+        
+        # Aquí eliminamos el bucle de "TODOS_LOS_PSICOLOGOS"
+        # Y dejamos el espacio limpio para tus futuros enlaces.
+        
+        st.info("Directorio de Instructores Certificados en actualización.")
+        
+        # --- AQUÍ PEGARÁS TUS ENLACES EN EL FUTURO ---
+        # Ejemplo:
+        # st.markdown("[Ver Instructores en CDMX](https://docs.google.com/...)")
+        
+        st.markdown("---")
+        st.caption("© 2025 Wellness Flow")
 # ==========================================
 # 💬 4. CHAT TERAPÉUTICO
 # ==========================================
