@@ -8,11 +8,24 @@ import streamlit.components.v1 as components
 # ==========================================
 # Cambié el icono por un cerebro 🧠 y el título
 st.set_page_config(page_title="Quantum Yoga 🧘", page_icon="🧘", layout="wide")
+# Coloca esto justo después de st.set_page_config
 st.markdown("""
     <style>
-    .stApp { background-color: #F8F9F5; } /* Fondo Hueso/Zen */
-    h1, h2, h3 { color: #556B2F !important; } /* Verde Oliva */
-    .stChatFloatingInputContainer { background-color: #F8F9F5; }
+    /* Fondo principal Verde Pálido / Hueso */
+    .stApp { background-color: #F1F8E9; } 
+    
+    /* Forzar color de texto en todo el chat */
+    .stChatMessage, .stMarkdown, p, li { color: #2E3440 !important; }
+    
+    /* Títulos en Verde Bosque */
+    h1, h2, h3 { color: #388E3C !important; }
+    
+    /* Ajuste de la barra lateral */
+    [data-testid="stSidebar"] { background-color: #2E3440; }
+    [data-testid="stSidebar"] * { color: #E8F5E9 !important; }
+
+    /* Estilo del input de chat */
+    .stChatFloatingInputContainer { background-color: #F1F8E9; }
     </style>
     """, unsafe_allow_html=True)
 # ==========================================
