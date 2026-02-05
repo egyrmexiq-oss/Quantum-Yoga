@@ -7,7 +7,7 @@ import streamlit.components.v1 as components
 # ⚙️ CONFIGURACIÓN DE PÁGINA (AMBIENTE ZEN)
 # ==========================================
 # Cambié el icono por un cerebro 🧠 y el título
-st.set_page_config(page_title="Quantum Yoga 🧘", page_icon="🧘", layout="wide")
+st.markdown('<h1 style="text-align: center;">Wellness’s Flow 🌿</h1>', unsafe_allow_html=True)
 # Coloca esto justo después de st.set_page_config
 # Coloca esto justo debajo de st.set_page_config
 st.markdown("""
