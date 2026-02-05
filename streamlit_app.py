@@ -23,76 +23,56 @@ st.markdown('<h1 style="text-align: center;">Wellness’s Flow 🌿</h1>', unsaf
 # Coloca esto justo debajo de st.set_page_config
 st.markdown("""
     <style>
-    /* 1. FONDO PRINCIPAL */
-    .stApp { background-color: #E8F5E9 !important; }
+    /* 1. Ajustes de Login y Márgenes */
+    .block-container { padding-top: 2rem !important; padding-bottom: 2rem !important; }
+    [data-testid="stImage"] img { border-radius: 15px; }
 
-    /* 2. BARRA LATERAL */
-    [data-testid="stSidebar"] { background-color: #344E41 !important; }
-    [data-testid="stSidebar"] * { color: #DAD7CD !important; }
+    /* 2. Personalización de Burbujas de Chat */
+    /* Usuario (Tú) -> Verde Musgo */
+    div[data-testid="stChatMessage"]:nth-child(odd) {
+        background-color: #264035 !important;
+        border: 1px solid #A3B18A;
+        color: #E8F5E9 !important;
+    }
+    
+    /* IA (Wendy) -> Transparente u Oscuro */
+    div[data-testid="stChatMessage"]:nth-child(even) {
+        background-color: transparent !important;
+        border: 1px solid #588157;
+        color: #E8F5E9 !important;
+    }
 
-    /* 3. TEXTO GENERAL */
-    .stApp, .stMarkdown, h1, h2, h3, p, li, label { color: #1B4D3E !important; }
-
-    /* 4. BOTONES */
+    /* 3. Botones (Estilo Zen) */
     div.stButton > button {
         background-color: #588157 !important;
         color: white !important;
         border-radius: 20px;
         border: none;
     }
+    div.stButton > button:hover {
+        background-color: #A3B18A !important;
+        color: #1A2F25 !important;
+    }
 
-    /* 5. LOGINS Y MÁRGENES */
-    .block-container { padding-top: 2rem !important; padding-bottom: 2rem !important; }
-    [data-testid="stImage"] img { border-radius: 15px; }
-
-    /* 6. CABECERA */
-    header[data-testid="stHeader"] { background-color: #E8F5E9 !important; }
-
-    /* 11. ZONA DE CHAT (CONTENEDOR) */
-    .stChatFloatingInputContainer { background-color: #E8F5E9 !important; }
-
-    /* --- 🚨 12. CORRECCIÓN DE INPUTS (LOGIN Y CHAT) 🚨 --- */
-    
-    /* A. Caja de Texto del LOGIN (Password) */
-    div[data-testid="stTextInput"] input {
-        background-color: #FFFFFF !important;
-        color: #1B4D3E !important; /* Texto Verde Oscuro */
-        border: 1px solid #588157 !important;
-        border-radius: 10px;
+    /* --- 🚨 4. OPERACIÓN FLECHA VISIBLE 🚨 --- */
+    /* Apuntamos directamente al botón de enviar */
+    button[data-testid="stChatInputSubmitButton"] {
+        color: #FFFFFF !important; /* Forzar color base blanco */
+    }
+    /* Apuntamos al ícono SVG dentro del botón */
+    button[data-testid="stChatInputSubmitButton"] svg {
+        fill: #FFFFFF !important;  /* Rellenar el icono de blanco puro */
+        stroke: #FFFFFF !important; /* Borde del icono blanco */
+    }
+    /* Efecto al pasar el mouse por la flecha (se pone verde claro) */
+    button[data-testid="stChatInputSubmitButton"]:hover svg {
+        fill: #A3B18A !important;
     }
     
-    /* B. Caja de Texto del CHAT (Abajo) */
-    div[data-testid="stChatInput"] {
-        background-color: #FFFFFF !important;
-        border: 2px solid #588157 !important;
-        border-radius: 20px !important;
-    }
-    div[data-testid="stChatInput"] textarea {
-        background-color: transparent !important;
-        color: #1B4D3E !important; /* Texto Verde Oscuro */
-        caret-color: #1B4D3E !important; /* Cursor Verde */
-    }
-
-    /* --- 🚨 13. BURBUJAS DE CHAT (LEER BIEN) 🚨 --- */
-    
-    /* A. Burbuja del USUARIO (Tú) -> Verde con letras BLANCAS */
-    div[data-testid="stChatMessage"]:nth-child(odd) {
-        background-color: #588157 !important;
-        border-radius: 20px;
-        color: #FFFFFF !important; /* ¡BLANCO IMPORTANTE! */
-    }
-    /* Forzar que el texto markdown dentro de la burbuja del usuario sea blanco */
-    div[data-testid="stChatMessage"]:nth-child(odd) p {
-        color: #FFFFFF !important;
-    }
-
-    /* B. Burbuja de la IA (Wendy) -> Blanca con letras VERDES */
-    div[data-testid="stChatMessage"]:nth-child(even) {
-        background-color: #FFFFFF !important;
-        border: 1px solid #A3B18A;
-        border-radius: 20px;
-        color: #1B4D3E !important;
-    }
+    /* 5. Ocultar decoración extra */
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    header {visibility: hidden;}
     </style>
     """, unsafe_allow_html=True)
 # ==========================================
