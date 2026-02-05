@@ -23,37 +23,75 @@ st.markdown('<h1 style="text-align: center;">Wellness’s Flow 🌿</h1>', unsaf
 # Coloca esto justo debajo de st.set_page_config
 st.markdown("""
     <style>
-    /* 1. EL FONDO PRINCIPAL (DERECHA) - Verde Menta Suave */
-    .stApp {
-        background-color: #E8F5E9 !important;
-    }
+    /* 1. FONDO PRINCIPAL */
+    .stApp { background-color: #E8F5E9 !important; }
 
-    /* 2. LA BARRA LATERAL (IZQUIERDA) - Verde Bosque (El que te gustaba) */
-    [data-testid="stSidebar"] {
-        background-color: #344E41 !important;
-    }
-    
-    /* 3. TEXTO DE LA BARRA LATERAL - Color Arena/Crema para contraste */
-    [data-testid="stSidebar"] * {
-        color: #DAD7CD !important;
-    }
+    /* 2. BARRA LATERAL */
+    [data-testid="stSidebar"] { background-color: #344E41 !important; }
+    [data-testid="stSidebar"] * { color: #DAD7CD !important; }
 
-    /* 4. TEXTO GENERAL DE LA PANTALLA - Verde Oscuro para leer bien */
-    .stApp, .stMarkdown, h1, h2, h3, p, li, label {
-        color: #1B4D3E !important;
-    }
+    /* 3. TEXTO GENERAL */
+    .stApp, .stMarkdown, h1, h2, h3, p, li, label { color: #1B4D3E !important; }
 
-    /* 5. BOTONES - Verde Medio con Texto Blanco */
+    /* 4. BOTONES */
     div.stButton > button {
         background-color: #588157 !important;
         color: white !important;
         border-radius: 20px;
         border: none;
     }
+
+    /* 5. LOGINS Y MÁRGENES */
+    .block-container { padding-top: 2rem !important; padding-bottom: 2rem !important; }
+    [data-testid="stImage"] img { border-radius: 15px; }
+
+    /* 6. CABECERA */
+    header[data-testid="stHeader"] { background-color: #E8F5E9 !important; }
+
+    /* 11. ZONA DE CHAT (CONTENEDOR) */
+    .stChatFloatingInputContainer { background-color: #E8F5E9 !important; }
+
+    /* --- 🚨 12. CORRECCIÓN DE INPUTS (LOGIN Y CHAT) 🚨 --- */
     
-    /* 6. INPUT DE CHAT - Para que no se vea blanco brillante */
-    .stChatFloatingInputContainer {
-        background-color: #E8F5E9 !important;
+    /* A. Caja de Texto del LOGIN (Password) */
+    div[data-testid="stTextInput"] input {
+        background-color: #FFFFFF !important;
+        color: #1B4D3E !important; /* Texto Verde Oscuro */
+        border: 1px solid #588157 !important;
+        border-radius: 10px;
+    }
+    
+    /* B. Caja de Texto del CHAT (Abajo) */
+    div[data-testid="stChatInput"] {
+        background-color: #FFFFFF !important;
+        border: 2px solid #588157 !important;
+        border-radius: 20px !important;
+    }
+    div[data-testid="stChatInput"] textarea {
+        background-color: transparent !important;
+        color: #1B4D3E !important; /* Texto Verde Oscuro */
+        caret-color: #1B4D3E !important; /* Cursor Verde */
+    }
+
+    /* --- 🚨 13. BURBUJAS DE CHAT (LEER BIEN) 🚨 --- */
+    
+    /* A. Burbuja del USUARIO (Tú) -> Verde con letras BLANCAS */
+    div[data-testid="stChatMessage"]:nth-child(odd) {
+        background-color: #588157 !important;
+        border-radius: 20px;
+        color: #FFFFFF !important; /* ¡BLANCO IMPORTANTE! */
+    }
+    /* Forzar que el texto markdown dentro de la burbuja del usuario sea blanco */
+    div[data-testid="stChatMessage"]:nth-child(odd) p {
+        color: #FFFFFF !important;
+    }
+
+    /* B. Burbuja de la IA (Wendy) -> Blanca con letras VERDES */
+    div[data-testid="stChatMessage"]:nth-child(even) {
+        background-color: #FFFFFF !important;
+        border: 1px solid #A3B18A;
+        border-radius: 20px;
+        color: #1B4D3E !important;
     }
     </style>
     """, unsafe_allow_html=True)
