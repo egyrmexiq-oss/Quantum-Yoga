@@ -81,11 +81,11 @@ else:
     # ==========================================
     # (Aquí va TODO el resto: Barra lateral, Chat, PDF, etc.)
     
-    with st.sidebar:
+    #with st.sidebar:
         # ... Tu código de barra lateral ...
-        if st.button("🔒 Salir"):
-            del st.session_state["usuario_activo"]
-            st.rerun()
+     #   if st.button("🔒 Salir"):
+      #      del st.session_state["usuario_activo"]
+       #     st.rerun()
 
     # ... Tu lógica de Chat y Mensajes ...
     # (Asegúrate de que todo el código del chat esté identado dentro de este 'else')
@@ -225,7 +225,7 @@ with st.sidebar:
     nivel = st.radio("Entrenamiento:", ["Basico", "Medio", "Avanzado"])
     
     if st.button("🍃 Nueva Sesión"): st.session_state.mensajes = []; st.rerun()
-    #if st.button("🔒 Salir"): st.session_state.usuario_activo = None; st.rerun()
+    if st.button("🔒 Salir"): st.session_state.usuario_activo = None; st.rerun()
 
     st.markdown("---")
     st.markdown("### 🛋️ Encuentra Instructor/a")
