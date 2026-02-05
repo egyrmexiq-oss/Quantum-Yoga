@@ -62,7 +62,10 @@ if not st.session_state.usuario_activo:
 # ==========================================
 # 🎨 ESTILO VISUAL (CSS) - FINAL Y CORREGIDO
 # ==========================================
-    st.markdown("""
+    # ==========================================
+# 🎨 ESTILO VISUAL (CSS) - ARMONIZACIÓN TOTAL
+# ==========================================
+   st.markdown("""
     <style>
     /* 1. FONDO PRINCIPAL */
     .stApp { background-color: #E8F5E9 !important; }
@@ -86,36 +89,40 @@ if not st.session_state.usuario_activo:
     .block-container { padding-top: 2rem !important; padding-bottom: 2rem !important; }
     [data-testid="stImage"] img { border-radius: 15px; }
 
-    /* 6. CORRECCIÓN DE FRANJAS */
+    /* 6. CABECERA */
     header[data-testid="stHeader"] { background-color: #E8F5E9 !important; }
-    div[data-testid="stBottom"] { background-color: #E8F5E9 !important; }
 
-    /* --- 🚨 11. RECUPERACIÓN DEL INPUT DE CHAT (NIVEL EXPERTO) 🚨 --- */
+    /* --- 🚨 11. OPERACIÓN "FRANJA VERDE" 🚨 --- */
     
-    /* A. El contenedor flotante inferior */
+    /* A. El contenedor flotante PRINCIPAL (La franja negra) */
     .stChatFloatingInputContainer {
-        background-color: #E8F5E9 !important; /* Mismo verde que el fondo */
-        bottom: 20px !important;
+        background-color: #E8F5E9 !important; /* Verde Menta */
+        bottom: 0px !important;
+        padding-bottom: 10px;
+    }
+    
+    /* B. Asegurar que los hijos de ese contenedor también sean verdes */
+    .stChatFloatingInputContainer > div {
+        background-color: #E8F5E9 !important;
     }
 
-    /* B. La caja específica del input (Borde y Fondo) */
+    /* C. La caja de escritura (Blanca) */
     div[data-testid="stChatInput"] {
-        background-color: #FFFFFF !important; /* BLANCO PURO */
-        border: 2px solid #344E41 !important; /* Borde Verde Oscuro para verlo bien */
-        border-radius: 15px !important;
-        padding: 5px !important;
-    }
-
-    /* C. El texto que escribes dentro */
-    div[data-testid="stChatInput"] textarea {
         background-color: #FFFFFF !important;
-        color: #000000 !important; /* Texto NEGRO */
-        caret-color: #000000 !important; /* Cursor NEGRO */
+        border: 2px solid #588157 !important;
+        border-radius: 20px !important;
+        color: #333333 !important;
     }
 
-    /* D. El botón de enviar (flechita) */
+    /* D. El texto que escribes */
+    div[data-testid="stChatInput"] textarea {
+        background-color: transparent !important;
+        color: #333333 !important;
+    }
+    
+    /* E. El botón de enviar */
     div[data-testid="stChatInput"] button {
-        color: #344E41 !important;
+        color: #588157 !important;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -232,3 +239,38 @@ st.caption("Espacio de práctica y orientación basado en IA")
 
 if "mensajes" not in st.session_state: 
     st.session_state.mensajes = [{"role": "assistant", "content": "¡Namasté! Soy Wellness Flow. Estoy aquí para guiar tu práctica de yoga y respiración. ¿Cómo se siente tu cuerpo hoy?"}]
+
+    # ==========================================
+# 💬 5. MOTOR DE CHAT (PEGAR AL FINAL DEL ARCHIVO)
+# ==========================================
+
+# Esta es la línea mágica que dibuja la caja blanca 👇
+if prompt := st.chat_input("Cuéntame cómo te sientes o qué te duele..."):
+    
+    # 1. Guardar y mostrar el mensaje del usuario
+    st.session_state.mensajes.append({"role": "user", "content": prompt})
+    with st.chat_message("user"):
+        st.markdown(prompt)
+    
+    # 2. Pensamiento de la IA (Wendy)
+    try:
+        # Construimos el prompt con la personalidad de Yoga
+        # Usamos el historial reciente para que tenga memoria
+        historial_texto = "\n".join([f"{m['role']}: {m['content']}" for m in st.session_state.mensajes[-5:]])
+        full_prompt = f"{INSTRUCCION_EXTRA}\n\nDiálogo reciente:\n{historial_texto}"
+        
+        # Llamada al modelo (Usamos el '2.5' que te funciona bien)
+        model = genai.GenerativeModel('gemini-2.5-flash')
+        response = model.generate_content(full_prompt)
+        bot_response = response.text
+        
+        # 3. Guardar y mostrar la respuesta
+        st.session_state.mensajes.append({"role": "assistant", "content": bot_response})
+        with st.chat_message("assistant"):
+            st.markdown(bot_response)
+            
+        # 4. Recargar para que se actualice el PDF
+        st.rerun()
+        
+    except Exception as e:
+        st.error(f"Ocurrió un error de conexión: {e}")
