@@ -108,18 +108,17 @@ TUS TAREAS:
 # 🧘 3. INTERFAZ ZEN (BARRA LATERAL)
 # ==========================================
 with st.sidebar:
-    st.header("🧘 Quantum Yoga")
-    st.caption("Salud Mental & Bienestar")
-    st.success(f"Hola, {st.session_state.usuario_activo}")
+    st.header("🧘 Wellness Flow")
+    st.caption("By Wendy Gtz. Nielsen")
+    st.success(f"Namasté, {st.session_state.usuario_activo}")
     
+    # ... (Tu contador de alumnos está excelente) ...
+
     st.markdown("---")
-    # Contador de Visitas (Mentalidad de Crecimiento)
-    st.markdown("""
-    <div style="background-color: #2e1a47; padding: 10px; border-radius: 5px; text-align: center;">
-        <span style="color: #E0B0FF; font-weight: bold;">🧘 Alumnos Atendidos:</span>
-        <img src="https://api.visitorbadge.io/api/visitors?path=quantum-yoga.com&label=&countColor=%23E0B0FF&style=flat&labelStyle=none" style="height: 20px;" />
-    </div>
-    """, unsafe_allow_html=True)
+    st.markdown("### 🕊️ Intención del Día")
+    st.info("La práctica de hoy se enfoca en la apertura y la gratitud.")
+    
+    # Eliminamos la sección de "Encuentra Psicólogo" y dejamos espacio para el futuro
     
     st.markdown("---")
     st.markdown("### ⚙️ Preferencias")
