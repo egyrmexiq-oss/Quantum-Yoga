@@ -9,23 +9,53 @@ import streamlit.components.v1 as components
 # Cambié el icono por un cerebro 🧠 y el título
 st.set_page_config(page_title="Quantum Yoga 🧘", page_icon="🧘", layout="wide")
 # Coloca esto justo después de st.set_page_config
+# Coloca esto justo debajo de st.set_page_config
 st.markdown("""
     <style>
-    /* Fondo principal Verde Pálido / Hueso */
-    .stApp { background-color: #F1F8E9; } 
-    
-    /* Forzar color de texto en todo el chat */
-    .stChatMessage, .stMarkdown, p, li { color: #2E3440 !important; }
-    
-    /* Títulos en Verde Bosque */
-    h1, h2, h3 { color: #388E3C !important; }
-    
-    /* Ajuste de la barra lateral */
-    [data-testid="stSidebar"] { background-color: #2E3440; }
-    [data-testid="stSidebar"] * { color: #E8F5E9 !important; }
+    /* 1. Fondo Principal Verde Pastel Suave */
+    .stApp {
+        background-color: #F1F5E9; 
+    }
 
-    /* Estilo del input de chat */
-    .stChatFloatingInputContainer { background-color: #F1F8E9; }
+    /* 2. Forzar que TODO el texto sea Gris Oscuro/Bosque (Legibilidad) */
+    .stApp, .stMarkdown, p, li, label, .stChatMessage {
+        color: #2D3E2F !important;
+    }
+
+    /* 3. Títulos en Verde Bosque Profundo */
+    h1, h2, h3, h4 {
+        color: #3A5A40 !important;
+    }
+
+    /* 4. BOTONES: Fondo Verde Wendy y Texto Blanco siempre visible */
+    div.stButton > button {
+        background-color: #588157 !important;
+        color: white !important;
+        border-radius: 25px !important;
+        border: none !important;
+        padding: 0.5rem 2rem !important;
+        font-weight: bold !important;
+    }
+
+    /* 5. EFECTO HOVER: Cuando pasas el mouse, se aclara un poco el verde */
+    div.stButton > button:hover {
+        background-color: #A3B18A !important;
+        color: #2D3E2F !important;
+        border: 1px solid #588157 !important;
+    }
+
+    /* 6. Caja de Chat y Inputs */
+    .stChatFloatingInputContainer {
+        background-color: #F1F5E9 !important;
+    }
+    
+    /* 7. Barra Lateral (Sidebar) con contraste */
+    [data-testid="stSidebar"] {
+        background-color: #344E41 !important;
+    }
+    [data-testid="stSidebar"] * {
+        color: #DAD7CD !important;
+    }
     </style>
     """, unsafe_allow_html=True)
 # ==========================================
