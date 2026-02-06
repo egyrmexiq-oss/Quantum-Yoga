@@ -23,56 +23,70 @@ st.markdown('<h1 style="text-align: center;">Wellness’s Flow 🌿</h1>', unsaf
 # Coloca esto justo debajo de st.set_page_config
 st.markdown("""
     <style>
-    /* 1. Ajustes de Login y Márgenes */
+    /* 1. Ajustes Generales */
     .block-container { padding-top: 2rem !important; padding-bottom: 2rem !important; }
     [data-testid="stImage"] img { border-radius: 15px; }
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    header {visibility: hidden;}
 
-    /* 2. Personalización de Burbujas de Chat */
-    /* Usuario (Tú) -> Verde Musgo */
+    /* 2. Burbujas de Chat */
     div[data-testid="stChatMessage"]:nth-child(odd) {
         background-color: #264035 !important;
         border: 1px solid #A3B18A;
         color: #E8F5E9 !important;
     }
-    
-    /* IA (Wendy) -> Transparente u Oscuro */
     div[data-testid="stChatMessage"]:nth-child(even) {
         background-color: transparent !important;
         border: 1px solid #588157;
         color: #E8F5E9 !important;
     }
 
-    /* 3. Botones (Estilo Zen) */
+    /* 3. Botones (Forzamos el Verde para quitar el rojo) */
     div.stButton > button {
         background-color: #588157 !important;
         color: white !important;
-        border-radius: 20px;
         border: none;
     }
-    div.stButton > button:hover {
-        background-color: #A3B18A !important;
-        color: #1A2F25 !important;
+
+    /* =======================================================
+       🚨 4. REPARACIÓN DEL CHAT (FUERZA BRUTA) 🚨
+       ======================================================= */
+    
+    /* A. El contenedor (La caja que rodea todo) */
+    div[data-testid="stChatInput"] {
+        background-color: #1A2F25 !important; /* Verde Bosque */
+        border: 2px solid #588157 !important; /* Borde Verde */
+        border-radius: 20px;
     }
 
-    /* --- 🚨 4. OPERACIÓN FLECHA VISIBLE 🚨 --- */
-    /* Apuntamos directamente al botón de enviar */
+    /* B. DONDE ESCRIBES (Aquí estaba el problema) */
+    div[data-testid="stChatInput"] textarea {
+        background-color: #1A2F25 !important; /* ¡Fondo Verde EXPLICITO! */
+        color: #FFFFFF !important;            /* Letra Blanca */
+        caret-color: #FFFFFF !important;      /* Cursor Blanco */
+        
+        /* Esto elimina el "gris" del corrector */
+        -webkit-text-fill-color: #FFFFFF !important;
+    }
+
+    /* C. Placeholder (Texto de ayuda) */
+    div[data-testid="stChatInput"] textarea::placeholder {
+        color: #A3B18A !important;
+        -webkit-text-fill-color: #A3B18A !important;
+    }
+
+    /* D. Botón de Enviar (Adiós al rojo) */
     button[data-testid="stChatInputSubmitButton"] {
-        color: #FFFFFF !important; /* Forzar color base blanco */
+        background-color: transparent !important;
+        border: none !important;
     }
-    /* Apuntamos al ícono SVG dentro del botón */
     button[data-testid="stChatInputSubmitButton"] svg {
-        fill: #FFFFFF !important;  /* Rellenar el icono de blanco puro */
-        stroke: #FFFFFF !important; /* Borde del icono blanco */
+        fill: #FFFFFF !important; /* Flecha Blanca */
     }
-    /* Efecto al pasar el mouse por la flecha (se pone verde claro) */
     button[data-testid="stChatInputSubmitButton"]:hover svg {
-        fill: #A3B18A !important;
+        fill: #A3B18A !important; /* Flecha Verde Claro al pasar mouse */
     }
-    
-    /* 5. Ocultar decoración extra */
-    #MainMenu {visibility: hidden;}
-    footer {visibility: hidden;}
-    header {visibility: hidden;}
     </style>
     """, unsafe_allow_html=True)
 # ==========================================

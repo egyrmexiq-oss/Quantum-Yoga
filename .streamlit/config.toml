@@ -1,7 +1,6 @@
-[theme]
-base = "dark"                   # <--- La clave de la paz
-primaryColor = "#A3B18A"        # Verde Salvia (Brillante para botones/borde)
-backgroundColor = "#1A2F25"     # Verde Bosque Muy Oscuro (Fondo principal)
-secondaryBackgroundColor = "#264035" # Verde Musgo (Barra lateral)
-textColor = "#E8F5E9"           # Blanco Menta (Texto legible)
+base = "dark"      # <--- Si esto dice "light", esa es la causa de todo el problema.
+primaryColor = "#A3B18A"
+backgroundColor = "#1A2F25"
+secondaryBackgroundColor = "#264035"
+textColor = "#E8F5E9"
 font = "sans serif"
