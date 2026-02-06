@@ -47,72 +47,66 @@ st.markdown('<h1 style="text-align: center;">Wellness’s Flow 🌿</h1>', unsaf
 # Coloca esto justo debajo de st.set_page_config
 st.markdown("""
     <style>
-    /* 1. Ajustes Generales */
+    /* =========================================
+       1. AJUSTES GENERALES
+       ========================================= */
     .block-container { padding-top: 2rem !important; padding-bottom: 2rem !important; }
-    [data-testid="stImage"] img { border-radius: 15px; }
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     header {visibility: hidden;}
 
-    /* 2. Burbujas de Chat */
-    div[data-testid="stChatMessage"]:nth-child(odd) {
-        background-color: #264035 !important;
-        border: 1px solid #A3B18A;
-        color: #E8F5E9 !important;
+    /* =========================================
+       🚨 2. ARREGLO DE TEXTO EN MENSAJES 🚨
+       ========================================= */
+    /* Esto fuerza a que CUALQUIER texto dentro de las burbujas sea BLANCO */
+    div[data-testid="stChatMessage"] * {
+        color: #FFFFFF !important;
+        -webkit-text-fill-color: #FFFFFF !important;
     }
-    div[data-testid="stChatMessage"]:nth-child(even) {
-        background-color: transparent !important;
+    
+    /* Fondo de las burbujas (Verde Elegante) */
+    div[data-testid="stChatMessage"] {
+        background-color: #1A2F25 !important;
         border: 1px solid #588157;
-        color: #E8F5E9 !important;
     }
 
-    /* 3. Botones (Forzamos el Verde para quitar el rojo) */
+    /* Iconos de usuario/IA */
+    div[data-testid="stChatMessage"] .st-emotion-cache-1p1m4t5 {
+        background-color: #588157 !important;
+    }
+
+    /* =========================================
+       3. BARRA DE ENTRADA (Mantenemos lo que ya funcionó)
+       ========================================= */
+    div[data-testid="stChatInput"] {
+        background-color: #1A2F25 !important;
+        border: 2px solid #588157 !important;
+        border-radius: 20px;
+    }
+    div[data-testid="stChatInput"] textarea {
+        background-color: #1A2F25 !important;
+        color: #FFFFFF !important;
+        -webkit-text-fill-color: #FFFFFF !important;
+        caret-color: #FFFFFF !important;
+    }
+    div[data-testid="stChatInput"] textarea::placeholder {
+        color: #A3B18A !important;
+        -webkit-text-fill-color: #A3B18A !important;
+    }
+    button[data-testid="stChatInputSubmitButton"] svg {
+        fill: #FFFFFF !important;
+    }
+    
+    /* 4. Botones Generales */
     div.stButton > button {
         background-color: #588157 !important;
         color: white !important;
         border: none;
     }
-
-    /* =======================================================
-       🚨 4. REPARACIÓN DEL CHAT (FUERZA BRUTA) 🚨
-       ======================================================= */
-    
-    /* A. El contenedor (La caja que rodea todo) */
-    div[data-testid="stChatInput"] {
-        background-color: #1A2F25 !important; /* Verde Bosque */
-        border: 2px solid #588157 !important; /* Borde Verde */
-        border-radius: 20px;
-    }
-
-    /* B. DONDE ESCRIBES (Aquí estaba el problema) */
-    div[data-testid="stChatInput"] textarea {
-        background-color: #1A2F25 !important; /* ¡Fondo Verde EXPLICITO! */
-        color: #FFFFFF !important;            /* Letra Blanca */
-        caret-color: #FFFFFF !important;      /* Cursor Blanco */
-        
-        /* Esto elimina el "gris" del corrector */
-        -webkit-text-fill-color: #FFFFFF !important;
-    }
-
-    /* C. Placeholder (Texto de ayuda) */
-    div[data-testid="stChatInput"] textarea::placeholder {
-        color: #A3B18A !important;
-        -webkit-text-fill-color: #A3B18A !important;
-    }
-
-    /* D. Botón de Enviar (Adiós al rojo) */
-    button[data-testid="stChatInputSubmitButton"] {
-        background-color: transparent !important;
-        border: none !important;
-    }
-    button[data-testid="stChatInputSubmitButton"] svg {
-        fill: #FFFFFF !important; /* Flecha Blanca */
-    }
-    button[data-testid="stChatInputSubmitButton"]:hover svg {
-        fill: #A3B18A !important; /* Flecha Verde Claro al pasar mouse */
-    }
     </style>
     """, unsafe_allow_html=True)
+
+
 # ==========================================
 # 🔐 1. LOGIN (Igual que la otra App)
 # ==========================================
