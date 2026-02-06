@@ -363,7 +363,7 @@ for mensaje in st.session_state.mensajes:
         st.markdown(mensaje["content"])
 
 # 2. BARRA DE ENTRADA (Esto es lo que desapareció) ⬇️
-if prompt := st.chat_input("Cuéntame cómo te sientes o qué te duele..."):
+if prompt := st.chat_input("Hola, por dónde quieres empezar hoy..?"):
     
     # A. Mostrar mensaje del usuario inmediatamente
     st.session_state.mensajes.append({"role": "user", "content": prompt})
