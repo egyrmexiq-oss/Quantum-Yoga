@@ -353,27 +353,32 @@ if "mensajes" not in st.session_state:
 # ==========================================
 
 # Esta es la línea mágica que dibuja la caja blanca 👇
-# ... (Después de mostrar el mensaje del usuario en el chat) ...
-
-    # ---------------------------------------------------------
-    # 🗣️ LA BOCA DE WENDY (Respuesta usando el modelo global)
-    # ---------------------------------------------------------
-    if prompt: # Verificación extra de seguridad
+if prompt := st.chat_input("Cuéntame cómo te sientes o qué te duele..."):
+    
+    # 1. Guardar y mostrar el mensaje del usuario
+    st.session_state.mensajes.append({"role": "user", "content": prompt})
+    with st.chat_message("user"):
+        st.markdown(prompt)
+    
+    # 2. Pensamiento de la IA (Wendy)
+    try:
+        # Construimos el prompt con la personalidad de Yoga
+        # Usamos el historial reciente para que tenga memoria
+        historial_texto = "\n".join([f"{m['role']}: {m['content']}" for m in st.session_state.mensajes[-5:]])
+        full_prompt = f"{INSTRUCCION_EXTRA}\n\nDiálogo reciente:\n{historial_texto}"
+        
+        # Llamada al modelo (Usamos el '2.5' que te funciona bien)
+        model = genai.GenerativeModel('gemini-2.5-flash')
+        response = model.generate_content(full_prompt)
+        bot_response = response.text
+        
+        # 3. Guardar y mostrar la respuesta
+        st.session_state.mensajes.append({"role": "assistant", "content": bot_response})
         with st.chat_message("assistant"):
-            with st.spinner("Wendy está pensando... 🌿"):
-                try:
-                    # 1. Usamos la variable 'model' que creamos en la LÍNEA 19
-                    # No la volvemos a configurar, ¡ya está lista!
-                    response = model.generate_content(prompt)
-                    
-                    # 2. Mostramos el texto
-                    st.markdown(response.text)
-                    
-                    # 3. Guardamos en historial
-                    st.session_state.mensajes.append({"role": "assistant", "content": response.text})
-                    
-                except Exception as e:
-                    # Si falla aquí, el error saldrá en ROJO en el chat
-                    st.error(f"⚠️ Error al generar respuesta: {e}")
-                    # Pista adicional para depurar
-                    st.caption("Prueba cambiando temporalmente a 'gemini-1.5-flash' en la línea 19 si el error persiste.")
+            st.markdown(bot_response)
+            
+        # 4. Recargar para que se actualice el PDF
+        st.rerun()
+        
+    except Exception as e:
+        st.error(f"Ocurrió un error de conexión: {e}")
