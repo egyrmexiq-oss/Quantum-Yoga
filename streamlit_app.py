@@ -1,5 +1,29 @@
 import streamlit as st
 import google.generativeai as genai
+
+# ==========================================
+# 🧠 CONFIGURACIÓN MAESTRA (Al principio del archivo)
+# ==========================================
+
+# 1. Buscamos la llave GOOGLE_API_KEY
+api_key = st.secrets.get("GOOGLE_API_KEY")
+
+if not api_key:
+    st.error("🚨 Error de Llave: Agrega GOOGLE_API_KEY en los Secrets del panel web.")
+    st.stop()
+
+# 2. Configuramos la IA con tu modelo 2.5
+try:
+    genai.configure(api_key=api_key)
+    # ¡USAMOS TU MODELO PREFERIDO! ✅
+    model = genai.GenerativeModel('gemini-2.5-flash') 
+except Exception as e:
+    st.error(f"❌ Error de Conexión: {e}")
+    st.stop()
+
+
+#import streamlit as st
+import google.generativeai as genai
 import pandas as pd
 import streamlit.components.v1 as components
 
@@ -202,25 +226,7 @@ else:
 #try: genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
 #except: st.error("Falta API Key")
 
-import streamlit as st
-import google.generativeai as genai
 
-# --- CONFIGURACIÓN DE LA LLAVE ---
-# Buscamos explícitamente "GOOGLE_API_KEY"
-api_key = st.secrets.get("GOOGLE_API_KEY")
-
-if not api_key:
-    # Si falla, muestra este error rojo
-    st.error("🚨 NO ENCUENTRO LA LLAVE. En Secrets debe llamarse: GOOGLE_API_KEY")
-    st.stop()
-
-# Si la encuentra, configuramos Google
-try:
-    genai.configure(api_key=api_key)
-    model = genai.GenerativeModel('gemini-2.5-flash')
-except Exception as e:
-    st.error(f"❌ La llave existe, pero Google la rechaza: {e}")
-    st.stop()
 
 # ⚠️ OJO: AQUÍ DEBES PEGAR EL LINK DE TU NUEVA HOJA DE PSICÓLOGOS 👇
 URL_GOOGLE_SHEET = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSBFtqUTpPEcOvfXZteeYZJBEzcoucLwN9OYlLRvbAGx_ZjIoQsg1fzqE6lOeDjoSTm4LWnoAnV7C4q/pub?output=csv" 
