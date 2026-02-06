@@ -5,7 +5,7 @@ import google.generativeai as genai
 # ⚙️ CONFIGURACIÓN DE PÁGINA (AMBIENTE ZEN)
 # ==========================================
 # Cambié el icono por un cerebro 🧠 y el título
-st.set_page_config(page_title="Quantum Mind - Psicología", page_icon="🍀", layout="wide")
+st.set_page_config(page_title="Quantum Mind - Psicología", page_icon="🌿", layout="wide")
 
 # ==========================================
 # 🧠 CONFIGURACIÓN MAESTRA (Al principio del archivo)
@@ -14,9 +14,9 @@ st.set_page_config(page_title="Quantum Mind - Psicología", page_icon="🍀", la
 # 1. Buscamos la llave GOOGLE_API_KEY
 api_key = st.secrets.get("GOOGLE_API_KEY")
 
-if not api_key:
-    st.error("🚨 Error de Llave: Agrega GOOGLE_API_KEY en los Secrets del panel web.")
-    st.stop()
+#if not api_key:
+   # st.error("🚨 Error de Llave: Agrega GOOGLE_API_KEY en los Secrets del panel web.")
+    #st.stop()
 
 # 2. Configuramos la IA con tu modelo 2.5
 try:
