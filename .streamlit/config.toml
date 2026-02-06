@@ -1,4 +1,5 @@
-base = "dark"      # <--- Si esto dice "light", esa es la causa de todo el problema.
+[theme]
+base = "dark"
 primaryColor = "#A3B18A"
 backgroundColor = "#1A2F25"
 secondaryBackgroundColor = "#264035"
