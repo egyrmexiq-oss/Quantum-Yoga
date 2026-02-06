@@ -353,32 +353,35 @@ if "mensajes" not in st.session_state:
 # ==========================================
 
 # Esta es la línea mágica que dibuja la caja blanca 👇
+# ==========================================
+# 💬 INTERFAZ DE CHAT (Pegar esto al final)
+# ==========================================
+
+# 1. Mostrar historial de mensajes previos
+for mensaje in st.session_state.mensajes:
+    with st.chat_message(mensaje["role"]):
+        st.markdown(mensaje["content"])
+
+# 2. BARRA DE ENTRADA (Esto es lo que desapareció) ⬇️
 if prompt := st.chat_input("Cuéntame cómo te sientes o qué te duele..."):
     
-    # 1. Guardar y mostrar el mensaje del usuario
+    # A. Mostrar mensaje del usuario inmediatamente
     st.session_state.mensajes.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)
-    
-    # 2. Pensamiento de la IA (Wendy)
-    try:
-        # Construimos el prompt con la personalidad de Yoga
-        # Usamos el historial reciente para que tenga memoria
-        historial_texto = "\n".join([f"{m['role']}: {m['content']}" for m in st.session_state.mensajes[-5:]])
-        full_prompt = f"{INSTRUCCION_EXTRA}\n\nDiálogo reciente:\n{historial_texto}"
-        
-        # Llamada al modelo (Usamos el '2.5' que te funciona bien)
-        model = genai.GenerativeModel('gemini-2.5-flash')
-        response = model.generate_content(full_prompt)
-        bot_response = response.text
-        
-        # 3. Guardar y mostrar la respuesta
-        st.session_state.mensajes.append({"role": "assistant", "content": bot_response})
-        with st.chat_message("assistant"):
-            st.markdown(bot_response)
-            
-        # 4. Recargar para que se actualice el PDF
-        st.rerun()
-        
-    except Exception as e:
-        st.error(f"Ocurrió un error de conexión: {e}")
+
+    # B. Generar respuesta de la IA
+    with st.chat_message("assistant"):
+        with st.spinner("Wendy está analizando tu caso... 🌿"):
+            try:
+                # Usamos el modelo que configuramos ARRIBA (gemini-2.5-flash)
+                response = model.generate_content(prompt)
+                texto_respuesta = response.text
+                
+                # Mostrar y guardar respuesta
+                st.markdown(texto_respuesta)
+                st.session_state.mensajes.append({"role": "assistant", "content": texto_respuesta})
+                
+            except Exception as e:
+                st.error(f"⚠️ Error de conexión: {e}")
+                st.info("Intenta refrescar la página. Si persiste, verifica tu API Key.")
