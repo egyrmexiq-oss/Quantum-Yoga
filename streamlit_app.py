@@ -199,8 +199,28 @@ else:
 # ==========================================
 # 💎 2. CONEXIÓN (AQUÍ PONES LA NUEVA HOJA)
 # ==========================================
-try: genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
-except: st.error("Falta API Key")
+#try: genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
+#except: st.error("Falta API Key")
+
+import streamlit as st
+import google.generativeai as genai
+
+# --- CONFIGURACIÓN DE LA LLAVE ---
+# Buscamos explícitamente "GOOGLE_API_KEY"
+api_key = st.secrets.get("GOOGLE_API_KEY")
+
+if not api_key:
+    # Si falla, muestra este error rojo
+    st.error("🚨 NO ENCUENTRO LA LLAVE. En Secrets debe llamarse: GOOGLE_API_KEY")
+    st.stop()
+
+# Si la encuentra, configuramos Google
+try:
+    genai.configure(api_key=api_key)
+    model = genai.GenerativeModel('gemini-2.5-flash')
+except Exception as e:
+    st.error(f"❌ La llave existe, pero Google la rechaza: {e}")
+    st.stop()
 
 # ⚠️ OJO: AQUÍ DEBES PEGAR EL LINK DE TU NUEVA HOJA DE PSICÓLOGOS 👇
 URL_GOOGLE_SHEET = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSBFtqUTpPEcOvfXZteeYZJBEzcoucLwN9OYlLRvbAGx_ZjIoQsg1fzqE6lOeDjoSTm4LWnoAnV7C4q/pub?output=csv" 
