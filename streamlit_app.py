@@ -2,6 +2,12 @@ import streamlit as st
 import google.generativeai as genai
 
 # ==========================================
+# ⚙️ CONFIGURACIÓN DE PÁGINA (AMBIENTE ZEN)
+# ==========================================
+# Cambié el icono por un cerebro 🧠 y el título
+st.set_page_config(page_title="Quantum Mind - Psicología", page_icon="🍀", layout="wide")
+
+# ==========================================
 # 🧠 CONFIGURACIÓN MAESTRA (Al principio del archivo)
 # ==========================================
 
