@@ -145,7 +145,32 @@ nivel_seleccionado = "Básico"
 with st.sidebar:
     st.header("🧘 Wellness Flow")
     st.caption(f"Plan: {tipo_plan}")
+    # 1. LOGO QUANTUM (Arriba de todo)
+    # Asegúrate de que el archivo 'logo_quantum.png' esté en tu GitHub
+    try:
+        st.image("logo_quantum.png", use_container_width=True) 
+    except:
+        st.header("Quantum Yoga ⚛️") # Texto de respaldo si falla la imagen
+
+    st.markdown("---")
+
+    # 2. AVATAR DE WENDY (¿Video o Foto?)
+    st.markdown("**Tu Instructora:**")
     
+    # --- OPCIÓN A: VIDEO (El Retrato Viviente) ---
+    # Si quieres usar el video, descomenta estas lineas y comenta la de imagen:
+    # try:
+    #     st.video("wendy_intro.mp4", format="video/mp4", start_time=0, loop=True, autoplay=True, muted=True)
+    # except:
+    #     st.write("Wendy está meditando...")
+
+    # --- OPCIÓN B: FOTO (La Clásica) ---
+    try:
+        st.image("Wendy v1.jpeg", caption="Wendy (IA)", use_container_width=True)
+    except:
+        st.write("🧘‍♀️") # Icono si falla
+
+    st.markdown("---")
     # SELECTOR DE NIVEL (Solo para Premium)
     if tipo_plan == "PREMIUM":
         st.markdown("### 🎚️ Nivel de Práctica")
