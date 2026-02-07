@@ -225,7 +225,7 @@ with st.sidebar:
     # Botón de Salir
     if st.button("🔒 Cerrar Sesión", use_container_width=True):
         del st.session_state["usuario_activo"]
-        st.rerun())
+        st.rerun()
 
 # --- PROMPTS DE NIVELES ---
 if nivel_seleccionado == "DEMO":
