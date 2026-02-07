@@ -312,6 +312,10 @@ if prompt := st.chat_input("Escribe aquí..."):
                 texto_wendy = response.text
                 st.markdown(texto_wendy)
 
+                # 👇 ¡AQUÍ VA LA LÍNEA NUEVA! 👇
+                mostrar_imagen_postura(texto_wendy) 
+                # 👆 ESTO HARÁ LA MAGIA VISUAL
+
                 # LÓGICA DE AUDIO (Solo si el switch está ON)
                 audio_bytes = None
                 if usar_voz and client_eleven:
