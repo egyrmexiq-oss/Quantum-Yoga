@@ -3,6 +3,8 @@ import google.generativeai as genai
 import base64
 from fpdf import FPDF
 from elevenlabs.client import ElevenLabs
+import requests # <--- NUEVA HERRAMIENTA PARA TRAER IMÁGENES
+from io import BytesIO
 
 # ==========================================
 # ⚙️ 1. CONFIGURACIÓN INICIAL
@@ -50,7 +52,7 @@ st.markdown("""
     """, unsafe_allow_html=True)
 
 # ==========================================
-# 🛠️ 4. FUNCIONES DE APOYO (VISUAL + AUDIO + PDF)
+# 🛠️ 4. FUNCIONES DE APOYO
 # ==========================================
 def limpiar_texto(texto):
     return texto.encode('latin-1', 'ignore').decode('latin-1')
@@ -65,7 +67,7 @@ def generar_pdf_yoga(usuario, historial):
     pdf.set_font("Arial", size=11)
     for msg in historial:
         role = "Wendy" if msg['role'] == 'assistant' else "Alumno"
-        if "audio" not in msg:
+        if "audio" not in msg and "imagen" not in msg:
             content = limpiar_texto(msg['content'])
             pdf.set_font("Arial", 'B', 11)
             pdf.cell(0, 8, txt=f"{role}:", ln=1)
@@ -83,8 +85,21 @@ def generar_audio_elevenlabs(texto):
         return b"".join(chunk for chunk in audio)
     except: return None
 
+# --- FUNCIÓN NUEVA: EL DISFRAZ PARA WIKIPEDIA 🕵️‍♂️ ---
+def obtener_imagen_nube(url):
+    """Descarga la imagen engañando al servidor con un Header de navegador"""
+    try:
+        # Este es el 'Pasaporte' falso para que crean que somos un navegador Chrome
+        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'}
+        response = requests.get(url, headers=headers)
+        if response.status_code == 200:
+            return BytesIO(response.content) # Devuelve la imagen lista
+    except:
+        return None
+    return None
+
 def mostrar_imagen_postura(texto_wendy):
-    """Busca posturas en el texto y muestra imágenes de Wikimedia"""
+    """Busca posturas y muestra la imagen descargada"""
     diccionario_cloud = {
         "tadasana": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Tadasana_Yoga-Posture.svg/426px-Tadasana_Yoga-Posture.svg.png",
         "montaña": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Tadasana_Yoga-Posture.svg/426px-Tadasana_Yoga-Posture.svg.png",
@@ -96,7 +111,6 @@ def mostrar_imagen_postura(texto_wendy):
         "guerrero": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Virabhadrasana_I_Yoga-Posture.svg/487px-Virabhadrasana_I_Yoga-Posture.svg.png",
         "loto": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Padmasana_Yoga-Posture.svg/640px-Padmasana_Yoga-Posture.svg.png",
         "triángulo": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Trikonasana_Yoga-Posture.svg/640px-Trikonasana_Yoga-Posture.svg.png",
-        "trikonasana": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Trikonasana_Yoga-Posture.svg/640px-Trikonasana_Yoga-Posture.svg.png",
         "cadáver": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Shavasana_Yoga-Posture.svg/640px-Shavasana_Yoga-Posture.svg.png",
         "savasana": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Shavasana_Yoga-Posture.svg/640px-Shavasana_Yoga-Posture.svg.png"
     }
@@ -105,11 +119,15 @@ def mostrar_imagen_postura(texto_wendy):
     
     for clave, url in diccionario_cloud.items():
         if clave in texto_min:
-            # Encontró una postura!
-            c1, c2, c3 = st.columns([1, 2, 1])
-            with c2:
-                st.image(url, caption=f"Postura: {clave.capitalize()}", use_container_width=True)
-            break # Solo mostramos una para no saturar
+            # Usamos la nueva función para "robar" la imagen legalmente
+            imagen_bytes = obtener_imagen_nube(url)
+            if imagen_bytes:
+                c1, c2, c3 = st.columns([1, 2, 1])
+                with c2:
+                    st.image(imagen_bytes, caption=f"Postura: {clave.capitalize()}", use_container_width=True)
+                return imagen_bytes # Devolvemos para guardar en historial
+            break
+    return None
 
 # ==========================================
 # 🚪 5. LOGIN INTELIGENTE
@@ -199,8 +217,14 @@ if "mensajes" not in st.session_state:
 for msg in st.session_state.mensajes:
     with st.chat_message(msg["role"]):
         st.markdown(msg["content"])
-        if msg["role"] == "assistant":
-            mostrar_imagen_postura(msg["content"]) # Mostrar imagen si existe en historial
+        
+        # MOSTRAR IMAGEN GUARDADA EN HISTORIAL 🖼️
+        if "imagen_data" in msg:
+             c1, c2, c3 = st.columns([1, 2, 1])
+             with c2:
+                st.image(msg["imagen_data"], caption="Postura Visual", use_container_width=True)
+                
+        # MOSTRAR AUDIO 🎵
         if "audio_data" in msg:
             st.audio(msg["audio_data"], format="audio/mp3")
 
@@ -216,8 +240,8 @@ if prompt := st.chat_input("Escribe aquí..."):
                 texto = response.text
                 st.markdown(texto)
                 
-                # 2. Mostrar Imagen (NUEVO 🖼️)
-                mostrar_imagen_postura(texto)
+                # 2. Generar/Obtener Imagen (CON TRUCO)
+                img_bytes = mostrar_imagen_postura(texto)
 
                 # 3. Generar Audio
                 audio_bytes = None
@@ -225,9 +249,11 @@ if prompt := st.chat_input("Escribe aquí..."):
                     audio_bytes = generar_audio_elevenlabs(texto)
                     if audio_bytes: st.audio(audio_bytes, format="audio/mp3")
 
-                # 4. Guardar
+                # 4. Guardar todo
                 msg = {"role": "assistant", "content": texto}
                 if audio_bytes: msg["audio_data"] = audio_bytes
+                if img_bytes: msg["imagen_data"] = img_bytes # Guardamos la imagen para que no desaparezca
+                
                 st.session_state.mensajes.append(msg)
                 
             except Exception as e:
