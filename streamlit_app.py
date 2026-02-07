@@ -164,7 +164,7 @@ tipo_plan = st.session_state.get("tipo_plan", "DEMO")
 nivel = "Básico" 
 
 with st.sidebar:
-    st.markdown("**Quantum Yoga ⚛️**")
+    st.markdown("**         Quantum Yoga ⚛️**")
     try: st.image("logo_quantum.png", use_container_width=True) 
     except: st.header("Quantum Yoga ⚛️")
     st.markdown("---")
