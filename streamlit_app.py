@@ -7,10 +7,10 @@ from elevenlabs.client import ElevenLabs
 # ==========================================
 # ⚙️ 1. CONFIGURACIÓN INICIAL
 # ==========================================
-st.set_page_config(page_title="Wellness Flow", page_icon="🌿", layout="wide", initial_sidebar_state="collapsed")
+st.set_page_config(page_title="Wellness Flow", page_icon="🌿", layout="wide", initial_sidebar_state="expanded")
 
 # ==========================================
-# 🧠 2. CEREBRO Y VOZ (CONEXIONES)
+# 🧠 2. CONEXIONES (CEREBRO Y VOZ)
 # ==========================================
 # A. Google Gemini
 api_key = st.secrets.get("GOOGLE_API_KEY")
@@ -94,92 +94,77 @@ def generar_audio_elevenlabs(texto):
     except: return None
 
 # ==========================================
-# 🚪 5. LOGIN INTELIGENTE (¡AHORA LEE TUS SECRETS!)
+# 🚪 5. LOGIN INTELIGENTE
 # ==========================================
 if "usuario_activo" not in st.session_state:
     st.image("https://images.unsplash.com/photo-1545205597-3d9d02c29597?q=80&w=2000&h=800&auto=format&fit=crop", use_container_width=True)
     col1, col2, col3 = st.columns([1,2,1])
     with col2:
+        st.markdown("<h2 style='text-align: center;'>Bienvenido a Quantum</h2>", unsafe_allow_html=True)
         clave = st.text_input("Clave de Acceso:", type="password")
         if st.button("Entrar", use_container_width=True):
             
-            # --- AQUÍ ESTÁ LA MAGIA DE TUS SECRETS ---
-            # Leemos el diccionario [access_keys] completo
             llaves_validas = st.secrets.get("access_keys", {})
             
-            # Verificamos si la clave escrita existe en tu lista
             if clave in llaves_validas:
-                nombre_usuario = llaves_validas[clave] # Ej: "Cliente Admin"
-                
-                # Si es la clave DEMO, activamos modo Demo
+                nombre_usuario = llaves_validas[clave]
                 if clave == "DEMO":
                     st.session_state.usuario_activo = nombre_usuario
                     st.session_state.tipo_plan = "DEMO"
                 else:
-                    # Cualquier otra clave de tu lista es PREMIUM
                     st.session_state.usuario_activo = nombre_usuario
                     st.session_state.tipo_plan = "PREMIUM"
-                
                 st.session_state.mensajes = []
                 st.rerun()
-                
-            # Backdoor de emergencia (por si acaso)
-            elif clave == "ADMIN123":
+            elif clave == "ADMIN123": # Backdoor
                 st.session_state.usuario_activo = "Super Admin"
                 st.session_state.tipo_plan = "PREMIUM"
                 st.session_state.mensajes = []
                 st.rerun()
             else:
-                st.error("Clave incorrecta. Verifica tus credenciales.")
+                st.error("Clave incorrecta.")
     st.stop()
 
 # ==========================================
-# 🏡 6. APP PRINCIPAL
+# 🏡 6. APP PRINCIPAL (DISEÑO QUANTUM)
 # ==========================================
 
-# Definir el Prompt según el plan
 tipo_plan = st.session_state.get("tipo_plan", "DEMO")
 nivel_seleccionado = "Básico" 
 
-# --- BARRA LATERAL ---
-# --- BARRA LATERAL COMPLETA (Reemplaza todo el bloque 'with st.sidebar:') ---
+# --- BARRA LATERAL RE-DISEÑADA ---
 with st.sidebar:
-    # 1. LOGO QUANTUM ⚛️ (Encabezado de Marca)
+    # 1. LOGO QUANTUM
     try:
-        # Asegúrate de subir 'logo_quantum.png' a GitHub
         st.image("logo_quantum.png", use_container_width=True) 
     except:
-        # Si falla la imagen, mostramos texto elegante
-        st.markdown("## Quantum Yoga ⚛️")
+        st.header("Quantum Yoga ⚛️")
 
     st.markdown("---")
 
-    # 2. TU INSTRUCTORA (Wendy) 🧘‍♀️
+    # 2. AVATAR DE WENDY
     st.markdown("**Tu Instructora:**")
     
-    # --- SECCIÓN DE IMAGEN O VIDEO ---
-    # (Para usar VIDEO: descomenta las líneas de st.video y comenta st.image)
+    # --- ¿VIDEO O FOTO? (Descomenta el que quieras usar) ---
     try:
-        # OPCIÓN A (VIDEO):
+        # VIDEO (Si quieres video, quita los # de abajo y pon # en st.image)
         # st.video("wendy_intro.mp4", format="video/mp4", start_time=0, loop=True, autoplay=True, muted=True)
         
-        # OPCIÓN B (FOTO - ACTIVA POR DEFECTO):
+        # FOTO (Activa por defecto)
         st.image("Wendy v1.jpeg", caption="Wendy (IA)", use_container_width=True)
     except:
-        st.write("🧘‍♀️") # Icono de respaldo
+        st.write("🧘‍♀️")
 
     st.markdown("---")
     
-    # 3. DATOS DE SESIÓN 👤
+    # 3. DATOS USUARIO
     st.caption(f"Hola, **{st.session_state.usuario_activo}**")
     
-    # Lógica de Planes
     if tipo_plan == "PREMIUM":
-        st.success(f"💎 Plan: {tipo_plan}") # Etiqueta verde bonita
-        
+        st.success(f"💎 Plan: {tipo_plan}")
         st.markdown("### 🎚️ Intensidad")
         nivel_seleccionado = st.select_slider(
-            "Nivel de Práctica:", 
+            "Nivel:", 
             options=["Básico", "Medio", "Avanzado"],
             value="Básico",
             label_visibility="collapsed"
@@ -190,15 +175,15 @@ with st.sidebar:
 
     st.markdown("---")
     
-    # 4. HERRAMIENTAS 🛠️
-    usar_voz = st.toggle("🔊 Voz de Wendy", value=True)
+    # 4. HERRAMIENTAS (VOZ OFF POR DEFECTO) 🔇
+    # Aquí está el cambio que pediste: value=False
+    usar_voz = st.toggle("🔊 Voz de Wendy", value=False)
     
     if st.button("🔄 Nueva Sesión", use_container_width=True):
         st.session_state.mensajes = []
         st.rerun()
         
-    # 5. ZONA DE DESCARGA PDF (¡CON LEYENDAS RECUPERADAS!) 📄
-# 5. ZONA DE DESCARGA PDF (CORREGIDO: ALTO CONTRASTE) 👁️
+    # 5. PDF ALTO CONTRASTE
     if len(st.session_state.mensajes) > 1:
         st.markdown("---")
         st.markdown("### 📄 Tu Rutina")
@@ -207,61 +192,33 @@ with st.sidebar:
         try:
             pdf_data = generar_pdf_yoga(st.session_state.usuario_activo, st.session_state.mensajes)
             b64 = base64.b64encode(pdf_data).decode()
-            
-            # 🎨 AQUI ESTÁ EL CAMBIO:
-            # Color texto: #000000 (Negro Puro) !important
-            # Fondo: #E0E0E0 (Gris Claro/Hueso) !important
-            # Borde: #000000 (Negro)
-            # Peso fuente: 800 (Extra negrita)
             href = f'''
             <a href="data:application/octet-stream;base64,{b64}" download="Rutina_Quantum.pdf" 
                style="text-decoration:none; color: #000000 !important; background-color: #E0E0E0 !important; 
                       padding: 15px; border-radius: 10px; display: block; text-align: center; 
-                      border: 2px solid #000000; font-weight: 800; font-size: 16px; width: 100%;">
+                      border: 2px solid #000000; font-weight: 800; width: 100%;">
                📥 DESCARGAR PDF
             </a>
             '''
             st.markdown(href, unsafe_allow_html=True)
-        except Exception as e:
-            st.error(f"Error PDF: {e}")
+        except: pass
 
     st.markdown("---")
-    # Botón de Salir
     if st.button("🔒 Cerrar Sesión", use_container_width=True):
         del st.session_state["usuario_activo"]
         st.rerun()
 
-# --- PROMPTS DE NIVELES ---
+# --- PROMPTS ---
 if nivel_seleccionado == "DEMO":
-    INSTRUCCION = """
-    ERES WENDY. MODO DEMO.
-    Respuestas CORTAS (max 50 palabras).
-    Consejos genéricos.
-    Invita a adquirir Premium.
-    """
+    INSTRUCCION = "ERES WENDY. MODO DEMO. Respuestas CORTAS (max 50 palabras). Consejos genéricos. Invita a Premium."
 elif nivel_seleccionado == "Básico":
-    INSTRUCCION = """
-    ERES WENDY. NIVEL BÁSICO.
-    El usuario es PRINCIPIANTE.
-    1. Explica paso a paso con seguridad.
-    2. Traduce términos técnicos.
-    3. Enfócate en alivio y relajación.
-    """
+    INSTRUCCION = "ERES WENDY. NIVEL BÁSICO. El usuario es PRINCIPIANTE. Explica paso a paso con seguridad. Enfócate en alivio."
 elif nivel_seleccionado == "Medio":
-    INSTRUCCION = """
-    ERES WENDY. NIVEL MEDIO.
-    1. Flujo dinámico.
-    2. Nombres técnicos moderados.
-    """
+    INSTRUCCION = "ERES WENDY. NIVEL MEDIO. Flujo dinámico. Nombres técnicos moderados."
 elif nivel_seleccionado == "Avanzado":
-    INSTRUCCION = """
-    ERES WENDY. NIVEL AVANZADO.
-    1. Usa Sánscrito.
-    2. Enfócate en alineación perfecta y Pranayama avanzado.
-    3. Sé directa y técnica.
-    """
+    INSTRUCCION = "ERES WENDY. NIVEL AVANZADO. Usa Sánscrito. Enfócate en alineación perfecta y Pranayama."
 
-# --- ZONA DE CHAT ---
+# --- CHAT LOOP (AQUÍ ESTABA EL PROBLEMA ANTES) ---
 st.title("Wellness’s Flow 🌿")
 
 if "mensajes" not in st.session_state:
@@ -272,6 +229,7 @@ if "mensajes" not in st.session_state:
 for msg in st.session_state.mensajes:
     with st.chat_message(msg["role"]):
         st.markdown(msg["content"])
+        # REPRODUCTOR DE AUDIO RECUPERADO 🎵
         if "audio_data" in msg:
             st.audio(msg["audio_data"], format="audio/mp3")
 
@@ -287,6 +245,7 @@ if prompt := st.chat_input("Escribe aquí..."):
                 texto_wendy = response.text
                 st.markdown(texto_wendy)
 
+                # LÓGICA DE AUDIO (Solo si el switch está ON)
                 audio_bytes = None
                 if usar_voz and client_eleven:
                     audio_bytes = generar_audio_elevenlabs(texto_wendy) 
@@ -296,6 +255,7 @@ if prompt := st.chat_input("Escribe aquí..."):
                 msg_save = {"role": "assistant", "content": texto_wendy}
                 if audio_bytes: msg_save["audio_data"] = audio_bytes
                 st.session_state.mensajes.append(msg_save)
+                
                 st.rerun()
             except Exception as e:
                 st.error(f"Error: {e}")
