@@ -4,13 +4,13 @@ import base64
 from fpdf import FPDF
 
 # ==========================================
-# ⚙️ 1. CONFIGURACIÓN DE PÁGINA (SIEMPRE PRIMERO)
+# ⚙️ 1. CONFIGURACIÓN DE PÁGINA
 # ==========================================
 st.set_page_config(
     page_title="Wellness Flow",
     page_icon="🌿",
     layout="wide",
-    initial_sidebar_state="collapsed" # En móvil ayuda a que no estorbe al inicio
+    initial_sidebar_state="collapsed"
 )
 
 # ==========================================
@@ -29,30 +29,28 @@ except Exception as e:
     st.error(f"❌ Error de Conexión: {e}")
     st.stop()
 
-# Personalidad de Wendy
 INSTRUCCION_EXTRA = """
 ERES "WENDY", INSTRUCTORA DE YOGA Y MINDFULNESS.
 TU TONO: Calmado, profundo, empático y profesional.
 OBJETIVO: Guiar al usuario a un estado de bienestar.
 REGLAS:
-1. Usa lenguaje positivo y relajante.
-2. Sugiere posturas seguras (asanas) y respiración (pranayama).
-3. Si hay dolor, recomienda médico.
-4. Sé concisa pero cálida.
+1. Usa lenguaje positivo.
+2. Sugiere posturas seguras y respiración.
+3. Sé concisa.
 """
 
 # ==========================================
-# 🎨 3. ESTILOS "DARK ZEN" (CORREGIDO)
+# 🎨 3. ESTILOS "DARK ZEN" (MÓVIL + PC)
 # ==========================================
 st.markdown("""
     <style>
-    /* --- 1. FONDO GENERAL (Vuelta a la oscuridad elegante) --- */
+    /* --- 1. FONDO GENERAL --- */
     .stApp {
-        background-color: #0E1612 !important; /* Verde casi negro profundo */
+        background-color: #0E1612 !important;
         color: #E0E0E0 !important;
     }
 
-    /* --- 2. BARRA LATERAL (Verde Bosque) --- */
+    /* --- 2. BARRA LATERAL --- */
     [data-testid="stSidebar"] {
         background-color: #1A2F25 !important;
         border-right: 1px solid #344E41;
@@ -61,33 +59,27 @@ st.markdown("""
         color: #DAD7CD !important;
     }
 
-    /* --- 3. TEXTOS Y TÍTULOS --- */
-    h1, h2, h3, p, label {
-        color: #E8F5E9 !important; /* Blanco menta suave */
-    }
-    .stMarkdown {
-        color: #E0E0E0 !important;
+    /* --- 3. TEXTOS --- */
+    h1, h2, h3, p, label, .stMarkdown {
+        color: #E8F5E9 !important;
     }
 
-    /* --- 4. BURBUJAS DE CHAT (Alto Contraste) --- */
-    /* Usuario (Derecha) */
+    /* --- 4. BURBUJAS DE CHAT --- */
     div[data-testid="stChatMessage"]:nth-child(odd) {
         background-color: #1A2F25 !important;
         border: 1px solid #344E41;
     }
-    /* IA Wendy (Izquierda) */
     div[data-testid="stChatMessage"]:nth-child(even) {
-        background-color: #2D4035 !important; /* Un poco más claro para diferenciar */
+        background-color: #2D4035 !important;
         border: 1px solid #588157;
     }
-    /* TEXTO DENTRO DEL CHAT (Blanco Puro) */
     div[data-testid="stChatMessage"] p {
         color: #FFFFFF !important;
     }
     
-    /* --- 5. INPUT DEL CHAT (Adiós franjas negras) --- */
+    /* --- 5. INPUT DEL CHAT --- */
     .stChatFloatingInputContainer {
-        background-color: #0E1612 !important; /* Mismo color que el fondo */
+        background-color: #0E1612 !important;
     }
     div[data-testid="stChatInput"] {
         background-color: #1A2F25 !important;
@@ -106,27 +98,23 @@ st.markdown("""
         border: none;
         border-radius: 12px;
     }
-    div.stButton > button:hover {
-        background-color: #3A5A40 !important;
-    }
 
-    /* --- 7. ARREGLO MÓVIL (MENU VISIBLE) --- */
-    /* NO ocultamos el header completo, solo la decoración, para dejar el botón ☰ */
+    /* --- 7. ARREGLO MÓVIL --- */
     header[data-testid="stHeader"] {
         background-color: transparent !important;
     }
-    /* Aseguramos que el botón de menú sea blanco para que se vea */
-    button[kind="header"] {
-        color: white !important;
-    }
-    #MainMenu {visibility: visible;} /* Necesario para ver opciones */
+    #MainMenu {visibility: visible;}
     footer {visibility: hidden;}
     </style>
     """, unsafe_allow_html=True)
 
 # ==========================================
-# 🛠️ 4. FUNCIÓN PDF
+# 🛠️ 4. FUNCIÓN PDF (¡AHORA LIMPIA EMOJIS!)
 # ==========================================
+def limpiar_texto(texto):
+    # Esta función elimina caracteres que rompen el PDF (emojis, etc.)
+    return texto.encode('latin-1', 'ignore').decode('latin-1')
+
 def generar_pdf_yoga(usuario, historial):
     pdf = FPDF()
     pdf.add_page()
@@ -134,7 +122,8 @@ def generar_pdf_yoga(usuario, historial):
     
     # Título
     pdf.set_font("Arial", 'B', 16)
-    pdf.cell(0, 10, txt=f"Rutina Personalizada: {usuario}", ln=1, align='C')
+    clean_user = limpiar_texto(f"Rutina Personalizada: {usuario}")
+    pdf.cell(0, 10, txt=clean_user, ln=1, align='C')
     pdf.ln(10)
     
     # Contenido
@@ -142,13 +131,14 @@ def generar_pdf_yoga(usuario, historial):
     for msg in historial:
         role = "Instructor (Wendy)" if msg['role'] == 'assistant' else "Alumno"
         content = msg['content']
-        # Limpieza de caracteres para FPDF básico
-        content = content.encode('latin-1', 'replace').decode('latin-1')
+        
+        # LIMPIEZA CRÍTICA AQUÍ 👇
+        clean_content = limpiar_texto(content)
         
         pdf.set_font("Arial", 'B', 11)
         pdf.cell(0, 8, txt=f"{role}:", ln=1)
         pdf.set_font("Arial", size=11)
-        pdf.multi_cell(0, 7, txt=content)
+        pdf.multi_cell(0, 7, txt=clean_content)
         pdf.ln(5)
         
     return pdf.output(dest='S').encode('latin-1')
@@ -157,11 +147,8 @@ def generar_pdf_yoga(usuario, historial):
 # 🚪 5. PANTALLA DE LOGIN
 # ==========================================
 if "usuario_activo" not in st.session_state:
-    # Fondo e imagen minimalista
     st.image("https://images.unsplash.com/photo-1545205597-3d9d02c29597?q=80&w=2000&h=800&auto=format&fit=crop", use_container_width=True)
-    
     st.markdown("<h1 style='text-align: center;'>Wellness’s Flow 🌿</h1>", unsafe_allow_html=True)
-    st.markdown("<p style='text-align: center;'>Ingresa tu clave para acceder al santuario.</p>", unsafe_allow_html=True)
     
     col1, col2, col3 = st.columns([1,2,1])
     with col2:
@@ -179,12 +166,11 @@ if "usuario_activo" not in st.session_state:
 # 🏡 6. APLICACIÓN PRINCIPAL
 # ==========================================
 
-# Inicializar Chat
 if "mensajes" not in st.session_state:
     st.session_state.mensajes = []
-    st.session_state.mensajes.append({"role": "assistant", "content": "¡Namasté! Soy Wendy. ¿Cómo se siente tu cuerpo y mente hoy?"})
+    st.session_state.mensajes.append({"role": "assistant", "content": "¡Namasté! Soy Wendy. ¿Cómo se siente tu cuerpo hoy?"})
 
-# --- BARRA LATERAL (MENU) ---
+# --- BARRA LATERAL ---
 with st.sidebar:
     st.header("🧘 Wellness Flow")
     st.caption(f"Hola, {st.session_state.usuario_activo}")
@@ -196,26 +182,30 @@ with st.sidebar:
         st.session_state.mensajes = []
         st.rerun()
 
-    # BOTÓN PDF (Solo aparece si hay chat)
+    # --- BOTÓN PDF (CORREGIDO) ---
+    # Solo aparece si hay más de 1 mensaje (es decir, el usuario ya habló)
     if len(st.session_state.mensajes) > 1:
         st.markdown("---")
         st.markdown("### 📄 Tu Rutina")
+        st.caption("Descarga tu práctica personalizada.")
+        
+        # Generación del PDF
         try:
             pdf_data = generar_pdf_yoga(st.session_state.usuario_activo, st.session_state.mensajes)
             b64 = base64.b64encode(pdf_data).decode()
             
-            # Botón estilizado Dark
+            # Botón VISIBLE
             href = f'''
             <a href="data:application/octet-stream;base64,{b64}" download="Rutina_Wellness.pdf" 
-               style="text-decoration:none; color: #E8F5E9; background-color: #344E41; 
+               style="text-decoration:none; color: #1B4D3E; background-color: #DAD7CD; 
                       padding: 12px; border-radius: 10px; display: block; text-align: center; 
-                      border: 1px solid #588157; font-weight: bold;">
-               📥 Descargar PDF
+                      border: 2px solid #A3B18A; font-weight: bold;">
+               📥 DESCARGAR PDF
             </a>
             '''
             st.markdown(href, unsafe_allow_html=True)
-        except:
-            pass
+        except Exception as e:
+            st.error(f"Error PDF: {e}") # Si falla, ahora te dirá por qué
 
     st.markdown("---")
     if st.button("🔒 Salir", use_container_width=True):
@@ -225,13 +215,11 @@ with st.sidebar:
 # --- ZONA DE CHAT ---
 st.title("Wellness’s Flow 🌿")
 
-# Mostrar Mensajes
 for msg in st.session_state.mensajes:
     with st.chat_message(msg["role"]):
         st.markdown(msg["content"])
 
-# Input de Usuario
-if prompt := st.chat_input("Escribe aquí... (ej: Me duele el cuello)"):
+if prompt := st.chat_input("Escribe aquí..."):
     st.session_state.mensajes.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)
@@ -244,5 +232,7 @@ if prompt := st.chat_input("Escribe aquí... (ej: Me duele el cuello)"):
                 texto = response.text
                 st.markdown(texto)
                 st.session_state.mensajes.append({"role": "assistant", "content": texto})
+                # Forzamos recarga para que aparezca el botón en la barra lateral
+                st.rerun()
             except Exception as e:
                 st.error(f"Error: {e}")
