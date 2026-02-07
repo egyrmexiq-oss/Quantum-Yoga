@@ -4,16 +4,17 @@ import base64
 from fpdf import FPDF
 
 # ==========================================
-# ⚙️ 1. CONFIGURACIÓN DE PÁGINA (PRIMERA LÍNEA OBLIGATORIA)
+# ⚙️ 1. CONFIGURACIÓN DE PÁGINA (SIEMPRE PRIMERO)
 # ==========================================
 st.set_page_config(
     page_title="Wellness Flow",
     page_icon="🌿",
-    layout="wide"
+    layout="wide",
+    initial_sidebar_state="collapsed" # En móvil ayuda a que no estorbe al inicio
 )
 
 # ==========================================
-# 🧠 2. CONFIGURACIÓN DE LA IA (CEREBRO)
+# 🧠 2. CEREBRO (GOOGLE API)
 # ==========================================
 api_key = st.secrets.get("GOOGLE_API_KEY")
 
@@ -23,233 +24,225 @@ api_key = st.secrets.get("GOOGLE_API_KEY")
 
 try:
     genai.configure(api_key=api_key)
-    # Usamos tu modelo preferido
     model = genai.GenerativeModel('gemini-2.5-flash') 
 except Exception as e:
-    st.error(f"❌ Error de Conexión con Google: {e}")
+    st.error(f"❌ Error de Conexión: {e}")
     st.stop()
 
-# Instrucción de Personalidad (El Alma de Wendy)
+# Personalidad de Wendy
 INSTRUCCION_EXTRA = """
-ERES "WENDY", UNA INSTRUCTORA DE YOGA EXPERTA Y EMPÁTICA.
-TU TONO: Sereno, alentador, profesional y cálido.
-TUS REGLAS:
-1. Siempre sugiere posturas seguras y advierte "escuchar al cuerpo".
-2. Incluye nombres en Sánscrito cuando sea posible.
-3. Si el usuario reporta dolor agudo, sugiere ver a un médico.
-4. Tus respuestas deben ser estructuradas (Pasos 1, 2, 3...).
+ERES "WENDY", INSTRUCTORA DE YOGA Y MINDFULNESS.
+TU TONO: Calmado, profundo, empático y profesional.
+OBJETIVO: Guiar al usuario a un estado de bienestar.
+REGLAS:
+1. Usa lenguaje positivo y relajante.
+2. Sugiere posturas seguras (asanas) y respiración (pranayama).
+3. Si hay dolor, recomienda médico.
+4. Sé concisa pero cálida.
 """
 
 # ==========================================
-# 🎨 3. ESTILOS CSS (DISEÑO ZEN)
+# 🎨 3. ESTILOS "DARK ZEN" (CORREGIDO)
 # ==========================================
 st.markdown("""
     <style>
-    /* 1. FONDO PRINCIPAL */
-    .stApp { background-color: #E8F5E9 !important; }
+    /* --- 1. FONDO GENERAL (Vuelta a la oscuridad elegante) --- */
+    .stApp {
+        background-color: #0E1612 !important; /* Verde casi negro profundo */
+        color: #E0E0E0 !important;
+    }
 
-    /* 2. BARRA LATERAL */
-    [data-testid="stSidebar"] { background-color: #344E41 !important; }
-    [data-testid="stSidebar"] * { color: #DAD7CD !important; }
+    /* --- 2. BARRA LATERAL (Verde Bosque) --- */
+    [data-testid="stSidebar"] {
+        background-color: #1A2F25 !important;
+        border-right: 1px solid #344E41;
+    }
+    [data-testid="stSidebar"] * {
+        color: #DAD7CD !important;
+    }
 
-    /* 3. TEXTOS GENERALES (Verde Oscuro) */
-    h1, h2, h3, p, li, label, .stMarkdown { color: #1B4D3E !important; }
+    /* --- 3. TEXTOS Y TÍTULOS --- */
+    h1, h2, h3, p, label {
+        color: #E8F5E9 !important; /* Blanco menta suave */
+    }
+    .stMarkdown {
+        color: #E0E0E0 !important;
+    }
 
-    /* 4. BOTONES */
+    /* --- 4. BURBUJAS DE CHAT (Alto Contraste) --- */
+    /* Usuario (Derecha) */
+    div[data-testid="stChatMessage"]:nth-child(odd) {
+        background-color: #1A2F25 !important;
+        border: 1px solid #344E41;
+    }
+    /* IA Wendy (Izquierda) */
+    div[data-testid="stChatMessage"]:nth-child(even) {
+        background-color: #2D4035 !important; /* Un poco más claro para diferenciar */
+        border: 1px solid #588157;
+    }
+    /* TEXTO DENTRO DEL CHAT (Blanco Puro) */
+    div[data-testid="stChatMessage"] p {
+        color: #FFFFFF !important;
+    }
+    
+    /* --- 5. INPUT DEL CHAT (Adiós franjas negras) --- */
+    .stChatFloatingInputContainer {
+        background-color: #0E1612 !important; /* Mismo color que el fondo */
+    }
+    div[data-testid="stChatInput"] {
+        background-color: #1A2F25 !important;
+        border: 1px solid #588157 !important;
+        border-radius: 25px !important;
+    }
+    div[data-testid="stChatInput"] textarea {
+        color: #FFFFFF !important;
+        caret-color: #FFFFFF !important;
+    }
+    
+    /* --- 6. BOTONES --- */
     div.stButton > button {
         background-color: #588157 !important;
         color: white !important;
-        border-radius: 20px;
         border: none;
+        border-radius: 12px;
     }
     div.stButton > button:hover {
         background-color: #3A5A40 !important;
     }
 
-    /* 5. BURBUJAS DE CHAT */
-    div[data-testid="stChatMessage"] {
-        background-color: #1A2F25 !important; /* Fondo Verde Oscuro */
-        border: 1px solid #588157;
-    }
-    div[data-testid="stChatMessage"] * {
-        color: #FFFFFF !important; /* Texto BLANCO forzado */
-        -webkit-text-fill-color: #FFFFFF !important;
-    }
-    
-    /* Iconos de usuario/IA */
-    div[data-testid="stChatMessage"] .st-emotion-cache-1p1m4t5 {
-        background-color: #588157 !important;
-    }
-
-    /* 6. INPUT DEL CHAT (La caja blanca inferior) */
-    .stChatFloatingInputContainer { background-color: #E8F5E9 !important; }
-    
-    div[data-testid="stChatInput"] {
-        background-color: #FFFFFF !important;
-        border: 2px solid #588157 !important;
-        border-radius: 20px !important;
-    }
-    div[data-testid="stChatInput"] textarea {
+    /* --- 7. ARREGLO MÓVIL (MENU VISIBLE) --- */
+    /* NO ocultamos el header completo, solo la decoración, para dejar el botón ☰ */
+    header[data-testid="stHeader"] {
         background-color: transparent !important;
-        color: #333333 !important; /* Texto oscuro al escribir sobre blanco */
-        -webkit-text-fill-color: #333333 !important;
-        caret-color: #333333 !important;
     }
-    div[data-testid="stChatInput"] textarea::placeholder {
-        color: #888888 !important;
+    /* Aseguramos que el botón de menú sea blanco para que se vea */
+    button[kind="header"] {
+        color: white !important;
     }
-    button[data-testid="stChatInputSubmitButton"] svg {
-        fill: #588157 !important;
-    }
-
-    /* Ocultar menú de Streamlit */
-    #MainMenu {visibility: hidden;}
+    #MainMenu {visibility: visible;} /* Necesario para ver opciones */
     footer {visibility: hidden;}
-    header {visibility: hidden;}
     </style>
     """, unsafe_allow_html=True)
 
 # ==========================================
-# 🛠️ 4. FUNCIONES UTILITARIAS (PDF)
+# 🛠️ 4. FUNCIÓN PDF
 # ==========================================
 def generar_pdf_yoga(usuario, historial):
     pdf = FPDF()
     pdf.add_page()
     pdf.set_font("Arial", size=12)
     
+    # Título
     pdf.set_font("Arial", 'B', 16)
-    pdf.cell(200, 10, txt=f"Rutina Personalizada para: {usuario}", ln=1, align='C')
+    pdf.cell(0, 10, txt=f"Rutina Personalizada: {usuario}", ln=1, align='C')
     pdf.ln(10)
     
+    # Contenido
     pdf.set_font("Arial", size=11)
     for msg in historial:
         role = "Instructor (Wendy)" if msg['role'] == 'assistant' else "Alumno"
         content = msg['content']
-        
-        # Limpieza básica de caracteres latinos para FPDF estándar
+        # Limpieza de caracteres para FPDF básico
         content = content.encode('latin-1', 'replace').decode('latin-1')
         
         pdf.set_font("Arial", 'B', 11)
-        pdf.cell(200, 8, txt=f"{role}:", ln=1)
+        pdf.cell(0, 8, txt=f"{role}:", ln=1)
         pdf.set_font("Arial", size=11)
-        pdf.multi_cell(0, 8, txt=content)
+        pdf.multi_cell(0, 7, txt=content)
         pdf.ln(5)
         
     return pdf.output(dest='S').encode('latin-1')
 
 # ==========================================
-# 🚪 5. LÓGICA DE LOGIN
+# 🚪 5. PANTALLA DE LOGIN
 # ==========================================
 if "usuario_activo" not in st.session_state:
+    # Fondo e imagen minimalista
     st.image("https://images.unsplash.com/photo-1545205597-3d9d02c29597?q=80&w=2000&h=800&auto=format&fit=crop", use_container_width=True)
-    st.markdown('<h1 style="text-align: center;">Wellness’s Flow 🌿</h1>', unsafe_allow_html=True)
-    st.markdown('<h3 style="text-align: center;">Tu santuario personal de equilibrio</h3>', unsafe_allow_html=True)
+    
+    st.markdown("<h1 style='text-align: center;'>Wellness’s Flow 🌿</h1>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align: center;'>Ingresa tu clave para acceder al santuario.</p>", unsafe_allow_html=True)
     
     col1, col2, col3 = st.columns([1,2,1])
     with col2:
-        clave_input = st.text_input("Clave de Acceso:", type="password")
-        if st.button("Entrar a Sesión", use_container_width=True):
-            if clave_input == "DEMO":
+        clave = st.text_input("Clave de Acceso:", type="password")
+        if st.button("Entrar", use_container_width=True):
+            if clave == "DEMO" or clave == st.secrets.get("CLAVE_MAESTRA", ""):
                 st.session_state.usuario_activo = "Invitado"
-                st.session_state.mensajes = [] # Inicializar chat vacío
+                st.session_state.mensajes = []
                 st.rerun()
             else:
-                st.error("Clave incorrecta. Intenta con: DEMO")
+                st.error("Clave incorrecta.")
     st.stop()
 
 # ==========================================
-# 🏡 6. LA APP PRINCIPAL (Adentro)
+# 🏡 6. APLICACIÓN PRINCIPAL
 # ==========================================
 
-# --- INICIALIZACIÓN DE HISTORIAL ---
+# Inicializar Chat
 if "mensajes" not in st.session_state:
     st.session_state.mensajes = []
-    # Mensaje de bienvenida inicial
-    msg_inicial = "¡Namasté! Soy Wendy. Cuéntame, ¿cómo te sientes hoy o qué zona te gustaría trabajar?"
-    st.session_state.mensajes.append({"role": "assistant", "content": msg_inicial})
+    st.session_state.mensajes.append({"role": "assistant", "content": "¡Namasté! Soy Wendy. ¿Cómo se siente tu cuerpo y mente hoy?"})
 
-# --- BARRA LATERAL ---
+# --- BARRA LATERAL (MENU) ---
 with st.sidebar:
     st.header("🧘 Wellness Flow")
-    st.success(f"Hola, {st.session_state.usuario_activo}")
-    
+    st.caption(f"Hola, {st.session_state.usuario_activo}")
     st.markdown("---")
-    st.markdown("### ⚙️ Preferencias")
-    nivel = st.radio("Nivel:", ["Básico", "Medio", "Avanzado"])
     
-    st.markdown("---")
-    if st.button("🍃 Nueva Sesión"):
+    nivel = st.select_slider("Nivel de Energía:", options=["Baja", "Media", "Alta"], value="Media")
+    
+    if st.button("🔄 Nueva Sesión", use_container_width=True):
         st.session_state.mensajes = []
         st.rerun()
-        
-    # BOTÓN PDF (Solo si hay charla)
-# ... (dentro de with st.sidebar:) ...
 
-    # BOTÓN PDF MEJORADO (Solo si hay charla)
+    # BOTÓN PDF (Solo aparece si hay chat)
     if len(st.session_state.mensajes) > 1:
-        st.markdown("---") # Separador elegante
-        
-        # 1. EL LETRERO QUE PEDISTE 📢
-        st.markdown("### 📄 Tu Rutina Personalizada")
-        st.caption("Haz clic abajo para descargar e imprimir tu práctica diseñada por Wendy.")
-
+        st.markdown("---")
+        st.markdown("### 📄 Tu Rutina")
         try:
-            # Generamos el PDF
-            pdf_bytes = generar_pdf_yoga(st.session_state.usuario_activo, st.session_state.mensajes)
-            b64 = base64.b64encode(pdf_bytes).decode()
+            pdf_data = generar_pdf_yoga(st.session_state.usuario_activo, st.session_state.mensajes)
+            b64 = base64.b64encode(pdf_data).decode()
             
-            # 2. EL BOTÓN REDISEÑADO (Estilo Premium) 💎
-            # Usamos Verde Oscuro (#1B4D3E) para el texto y borde, sobre fondo claro.
+            # Botón estilizado Dark
             href = f'''
-            <a href="data:application/octet-stream;base64,{b64}" download="Rutina_Wellness_Flow.pdf" 
-               style="text-decoration:none; color: #1B4D3E !important; background-color: #E8F5E9 !important; 
-                      padding: 15px; border-radius: 15px; display: block; text-align: center; 
-                      font-weight: bold; font-size: 16px; border: 2px solid #1B4D3E;
-                      box-shadow: 0px 4px 6px rgba(0,0,0,0.1);">
-               📥 DESCARGAR RUTINA PDF
+            <a href="data:application/octet-stream;base64,{b64}" download="Rutina_Wellness.pdf" 
+               style="text-decoration:none; color: #E8F5E9; background-color: #344E41; 
+                      padding: 12px; border-radius: 10px; display: block; text-align: center; 
+                      border: 1px solid #588157; font-weight: bold;">
+               📥 Descargar PDF
             </a>
             '''
             st.markdown(href, unsafe_allow_html=True)
-            
-        except Exception as e:
-            # Por si acaso falla la generación
-            st.caption("Sigue conversando para preparar tu PDF...")
-    
-    # ... (después sigue el botón de Salir) ...
+        except:
+            pass
 
     st.markdown("---")
-    if st.button("🔒 Salir"):
+    if st.button("🔒 Salir", use_container_width=True):
         del st.session_state["usuario_activo"]
         st.rerun()
 
 # --- ZONA DE CHAT ---
 st.title("Wellness’s Flow 🌿")
-st.caption(f"Asistente IA - Nivel {nivel}")
 
-# 1. Mostrar historial
-for mensaje in st.session_state.mensajes:
-    with st.chat_message(mensaje["role"]):
-        st.markdown(mensaje["content"])
+# Mostrar Mensajes
+for msg in st.session_state.mensajes:
+    with st.chat_message(msg["role"]):
+        st.markdown(msg["content"])
 
-# 2. Input y Respuesta
-if prompt := st.chat_input("Escribe aquí tus síntomas o deseos..."):
-    
-    # Usuario
+# Input de Usuario
+if prompt := st.chat_input("Escribe aquí... (ej: Me duele el cuello)"):
     st.session_state.mensajes.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)
 
-    # IA (Wendy)
     with st.chat_message("assistant"):
-        with st.spinner("Wendy está preparando tu secuencia... 🧘‍♀️"):
+        with st.spinner("Conectando..."):
             try:
-                # TRUCO PRO: Le enviamos la instrucción oculta + lo que dijo el usuario
-                full_prompt = f"{INSTRUCCION_EXTRA}\n\nEl usuario es nivel {nivel}. Usuario dice: {prompt}"
-                
+                full_prompt = f"{INSTRUCCION_EXTRA}\nUsuario (Energía {nivel}): {prompt}"
                 response = model.generate_content(full_prompt)
-                texto_respuesta = response.text
-                
-                st.markdown(texto_respuesta)
-                st.session_state.mensajes.append({"role": "assistant", "content": texto_respuesta})
+                texto = response.text
+                st.markdown(texto)
+                st.session_state.mensajes.append({"role": "assistant", "content": texto})
             except Exception as e:
-                st.error(f"⚠️ Error de conexión: {e}")
+                st.error(f"Error: {e}")
