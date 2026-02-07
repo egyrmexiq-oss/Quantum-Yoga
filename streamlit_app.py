@@ -177,7 +177,7 @@ with st.sidebar:
     
     # 4. HERRAMIENTAS (VOZ OFF POR DEFECTO) 🔇
     # Aquí está el cambio que pediste: value=False
-    usar_voz = st.toggle("🔊 Voz de Wendy", value=False)
+    usar_voz = st.toggle("🔊 Voz de Wendy", value=True)
     
     if st.button("🔄 Nueva Sesión", use_container_width=True):
         st.session_state.mensajes = []
