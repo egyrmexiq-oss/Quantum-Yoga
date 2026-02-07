@@ -183,14 +183,39 @@ with st.sidebar:
         st.rerun()
         
     # BOTÓN PDF (Solo si hay charla)
+# ... (dentro de with st.sidebar:) ...
+
+    # BOTÓN PDF MEJORADO (Solo si hay charla)
     if len(st.session_state.mensajes) > 1:
+        st.markdown("---") # Separador elegante
+        
+        # 1. EL LETRERO QUE PEDISTE 📢
+        st.markdown("### 📄 Tu Rutina Personalizada")
+        st.caption("Haz clic abajo para descargar e imprimir tu práctica diseñada por Wendy.")
+
         try:
+            # Generamos el PDF
             pdf_bytes = generar_pdf_yoga(st.session_state.usuario_activo, st.session_state.mensajes)
             b64 = base64.b64encode(pdf_bytes).decode()
-            href = f'<a href="data:application/octet-stream;base64,{b64}" download="Mi_Rutina_Yoga.pdf" style="text-decoration:none; color:black; background-color:#DAD7CD; padding:10px; border-radius:10px; display:block; text-align:center;">📥 Descargar Rutina PDF</a>'
+            
+            # 2. EL BOTÓN REDISEÑADO (Estilo Premium) 💎
+            # Usamos Verde Oscuro (#1B4D3E) para el texto y borde, sobre fondo claro.
+            href = f'''
+            <a href="data:application/octet-stream;base64,{b64}" download="Rutina_Wellness_Flow.pdf" 
+               style="text-decoration:none; color: #1B4D3E !important; background-color: #E8F5E9 !important; 
+                      padding: 15px; border-radius: 15px; display: block; text-align: center; 
+                      font-weight: bold; font-size: 16px; border: 2px solid #1B4D3E;
+                      box-shadow: 0px 4px 6px rgba(0,0,0,0.1);">
+               📥 DESCARGAR RUTINA PDF
+            </a>
+            '''
             st.markdown(href, unsafe_allow_html=True)
+            
         except Exception as e:
-            st.warning("Escribe un poco más para generar el PDF.")
+            # Por si acaso falla la generación
+            st.caption("Sigue conversando para preparar tu PDF...")
+    
+    # ... (después sigue el botón de Salir) ...
 
     st.markdown("---")
     if st.button("🔒 Salir"):
