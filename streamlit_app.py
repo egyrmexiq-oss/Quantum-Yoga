@@ -17,9 +17,9 @@ st.set_page_config(
 # ==========================================
 api_key = st.secrets.get("GOOGLE_API_KEY")
 
-if not api_key:
-    st.error("🚨 Error: No se encontró la API Key en los Secrets.")
-    st.stop()
+#if not api_key:
+    #st.error("🚨 Error: No se encontró la API Key en los Secrets.")
+    #st.stop()
 
 try:
     genai.configure(api_key=api_key)
