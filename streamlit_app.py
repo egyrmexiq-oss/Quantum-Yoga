@@ -183,7 +183,7 @@ with st.sidebar:
         nivel = "DEMO"
     st.markdown("---")
     
-    usar_voz = st.toggle("🔊 Voz de Wendy", value=True)
+    usar_voz = st.toggle("🔊 Voz de Wendy", value=False)
     
     if st.button("🔄 Nueva Sesión", use_container_width=True):
         st.session_state.mensajes = []
