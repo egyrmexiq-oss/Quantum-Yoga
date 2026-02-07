@@ -139,7 +139,7 @@ if "usuario_activo" not in st.session_state:
     st.image("https://images.unsplash.com/photo-1545205597-3d9d02c29597?q=80&w=2000&h=800&auto=format&fit=crop", use_container_width=True)
     col1, col2, col3 = st.columns([1,2,1])
     with col2:
-        st.markdown("<h2 style='text-align: center;'>Bienvenido a Quantum</h2>", unsafe_allow_html=True)
+        st.markdown("<h2 style='text-align: center;'>Wendy's Wellness's Flow</h2>", unsafe_allow_html=True)
         clave = st.text_input("Clave de Acceso:", type="password")
         if st.button("Entrar", use_container_width=True):
             llaves = st.secrets.get("access_keys", {})
