@@ -1,3 +1,4 @@
+#Versión Final V4 - Fix Móvil y PDF
 import streamlit as st
 import google.generativeai as genai
 import base64
