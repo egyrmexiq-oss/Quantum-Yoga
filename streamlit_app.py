@@ -198,22 +198,26 @@ with st.sidebar:
         st.rerun()
         
     # 5. ZONA DE DESCARGA PDF (¡CON LEYENDAS RECUPERADAS!) 📄
+# 5. ZONA DE DESCARGA PDF (CORREGIDO: ALTO CONTRASTE) 👁️
     if len(st.session_state.mensajes) > 1:
         st.markdown("---")
-        # 👇 AQUÍ ESTÁN LAS LEYENDAS QUE FALTABAN
         st.markdown("### 📄 Tu Rutina")
-        st.caption("Descarga tu práctica personalizada para imprimir.")
+        st.caption("Descarga tu práctica para imprimir.")
 
         try:
             pdf_data = generar_pdf_yoga(st.session_state.usuario_activo, st.session_state.mensajes)
             b64 = base64.b64encode(pdf_data).decode()
             
-            # Botón Estilizado
+            # 🎨 AQUI ESTÁ EL CAMBIO:
+            # Color texto: #000000 (Negro Puro) !important
+            # Fondo: #E0E0E0 (Gris Claro/Hueso) !important
+            # Borde: #000000 (Negro)
+            # Peso fuente: 800 (Extra negrita)
             href = f'''
             <a href="data:application/octet-stream;base64,{b64}" download="Rutina_Quantum.pdf" 
-               style="text-decoration:none; color: #1B4D3E; background-color: #E8F5E9; 
-                      padding: 12px; border-radius: 8px; display: block; text-align: center; 
-                      border: 1px solid #1B4D3E; font-weight: bold; width: 100%;">
+               style="text-decoration:none; color: #000000 !important; background-color: #E0E0E0 !important; 
+                      padding: 15px; border-radius: 10px; display: block; text-align: center; 
+                      border: 2px solid #000000; font-weight: 800; font-size: 16px; width: 100%;">
                📥 DESCARGAR PDF
             </a>
             '''
