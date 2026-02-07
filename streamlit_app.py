@@ -231,7 +231,7 @@ for msg in st.session_state.mensajes:
         if "audio_data" in msg:
             st.audio(msg["audio_data"], format="audio/mp3")
 
-if prompt := st.chat_input("Escribe aquí..."):
+if prompt := st.chat_input("Escribe aquí tu pregunta o solicita un plan de yoga..."):
     st.session_state.mensajes.append({"role": "user", "content": prompt})
     with st.chat_message("user"): st.markdown(prompt)
 
