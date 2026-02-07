@@ -94,6 +94,73 @@ def generar_audio_elevenlabs(texto):
     except: return None
 
 # ==========================================
+# 🖼️ DICCIONARIO VISUAL (CLOUD EDITION ☁️)
+# ==========================================
+def mostrar_imagen_postura(texto_wendy):
+    """
+    Detecta posturas y muestra la imagen directamente desde la Nube (Wikimedia).
+    ¡Sin descargas manuales!
+    """
+    # URLs directas a esquemas limpios de Wikimedia
+    diccionario_cloud = {
+        # --- BÁSICAS ---
+        "tadasana": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Tadasana_Yoga-Posture.svg/426px-Tadasana_Yoga-Posture.svg.png",
+        "montaña": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Tadasana_Yoga-Posture.svg/426px-Tadasana_Yoga-Posture.svg.png",
+        
+        "árbol": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Vriksasana_Yoga-Posture.svg/365px-Vriksasana_Yoga-Posture.svg.png",
+        "vrksasana": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Vriksasana_Yoga-Posture.svg/365px-Vriksasana_Yoga-Posture.svg.png",
+        
+        "perro boca abajo": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Adho_Mukha_Svanasana_Yoga-Posture.svg/640px-Adho_Mukha_Svanasana_Yoga-Posture.svg.png",
+        "adho mukha": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Adho_Mukha_Svanasana_Yoga-Posture.svg/640px-Adho_Mukha_Svanasana_Yoga-Posture.svg.png",
+        
+        "cobra": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Bhujangasana_Yoga-Posture.svg/640px-Bhujangasana_Yoga-Posture.svg.png",
+        "bhujangasana": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Bhujangasana_Yoga-Posture.svg/640px-Bhujangasana_Yoga-Posture.svg.png",
+        
+        "guerrero": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Virabhadrasana_I_Yoga-Posture.svg/487px-Virabhadrasana_I_Yoga-Posture.svg.png",
+        "virabhadrasana": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Virabhadrasana_I_Yoga-Posture.svg/487px-Virabhadrasana_I_Yoga-Posture.svg.png",
+        
+        "loto": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Padmasana_Yoga-Posture.svg/640px-Padmasana_Yoga-Posture.svg.png",
+        "padmasana": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Padmasana_Yoga-Posture.svg/640px-Padmasana_Yoga-Posture.svg.png",
+        
+        "triángulo": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Trikonasana_Yoga-Posture.svg/640px-Trikonasana_Yoga-Posture.svg.png",
+        "trikonasana": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Trikonasana_Yoga-Posture.svg/640px-Trikonasana_Yoga-Posture.svg.png",
+        
+        "cadáver": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Shavasana_Yoga-Posture.svg/640px-Shavasana_Yoga-Posture.svg.png",
+        "savasana": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Shavasana_Yoga-Posture.svg/640px-Shavasana_Yoga-Posture.svg.png",
+        "relax": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Shavasana_Yoga-Posture.svg/640px-Shavasana_Yoga-Posture.svg.png"
+    }
+    
+    texto_min = texto_wendy.lower()
+    
+    # Buscar coincidencia
+    imagen_url = None
+    nombre_postura = ""
+    
+    for clave, url in diccionario_cloud.items():
+        if clave in texto_min:
+            imagen_url = url
+            nombre_postura = clave.capitalize()
+            break 
+            
+    # Mostrar desde Internet
+    if imagen_url:
+        try:
+            # Columnas para centrar la imagen
+            c1, c2, c3 = st.columns([1, 2, 1]) 
+            with c2:
+                # Borde redondeado y sombra para efecto "Tarjeta"
+                st.markdown(
+                    f"""
+                    <div style="text-align: center; background-color: white; padding: 10px; border-radius: 15px; box-shadow: 0px 4px 12px rgba(0,0,0,0.3);">
+                        <img src="{imagen_url}" width="100%" style="border-radius: 10px;">
+                        <p style="color: black; margin-top: 5px; font-weight: bold;">{nombre_postura}</p>
+                    </div>
+                    """, 
+                    unsafe_allow_html=True
+                )
+        except: pass
+
+# ==========================================
 # 🚪 5. LOGIN INTELIGENTE
 # ==========================================
 if "usuario_activo" not in st.session_state:
