@@ -98,37 +98,40 @@ def obtener_imagen_nube(url):
         return None
     return None
 
+#def mostrar_imagen_postura(texto_wendy):
+    # ...
+
 def mostrar_imagen_postura(texto_wendy):
-    """Busca posturas y muestra la imagen descargada"""
-    diccionario_cloud = {
-        "tadasana": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Tadasana_Yoga-Posture.svg/426px-Tadasana_Yoga-Posture.svg.png",
-        "montaña": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Tadasana_Yoga-Posture.svg/426px-Tadasana_Yoga-Posture.svg.png",
-        "árbol": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Vriksasana_Yoga-Posture.svg/365px-Vriksasana_Yoga-Posture.svg.png",
-        "vrksasana": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Vriksasana_Yoga-Posture.svg/365px-Vriksasana_Yoga-Posture.svg.png",
-        "perro": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Adho_Mukha_Svanasana_Yoga-Posture.svg/640px-Adho_Mukha_Svanasana_Yoga-Posture.svg.png",
-        "adho": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Adho_Mukha_Svanasana_Yoga-Posture.svg/640px-Adho_Mukha_Svanasana_Yoga-Posture.svg.png",
-        "cobra": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Bhujangasana_Yoga-Posture.svg/640px-Bhujangasana_Yoga-Posture.svg.png",
-        "guerrero": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Virabhadrasana_I_Yoga-Posture.svg/487px-Virabhadrasana_I_Yoga-Posture.svg.png",
-        "loto": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Padmasana_Yoga-Posture.svg/640px-Padmasana_Yoga-Posture.svg.png",
-        "triángulo": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Trikonasana_Yoga-Posture.svg/640px-Trikonasana_Yoga-Posture.svg.png",
-        "cadáver": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Shavasana_Yoga-Posture.svg/640px-Shavasana_Yoga-Posture.svg.png",
-        "savasana": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Shavasana_Yoga-Posture.svg/640px-Shavasana_Yoga-Posture.svg.png"
+    """
+    Muestra imágenes locales (subidas a GitHub) si detecta la palabra clave.
+    ¡100% Robusto y sin bloqueos!
+    """
+    # DICCIONARIO: Palabra Clave -> Nombre de tu archivo
+    diccionario_local = {
+        "árbol": "arbol.png",
+        "vrksasana": "arbol.png",
+        
+        "guerrero": "guerrero.png",
+        "virabhadrasana": "guerrero.png",
+        
+        "cobra": "cobra.png",
+        "bhujangasana": "cobra.png",
+        
+        # Puedes agregar más aquí cuando subas más fotos:
+        # "loto": "loto.png",
     }
     
     texto_min = texto_wendy.lower()
     
-    for clave, url in diccionario_cloud.items():
+    for clave, archivo in diccionario_local.items():
         if clave in texto_min:
-            # Usamos la nueva función para "robar" la imagen legalmente
-            imagen_bytes = obtener_imagen_nube(url)
-            if imagen_bytes:
+            # Verificamos si el archivo realmente existe para no romper la app
+            if os.path.exists(archivo):
                 c1, c2, c3 = st.columns([1, 2, 1])
                 with c2:
-                    st.image(imagen_bytes, caption=f"Postura: {clave.capitalize()}", use_container_width=True)
-                return imagen_bytes # Devolvemos para guardar en historial
-            break
+                    st.image(archivo, caption=f"Postura: {clave.capitalize()}", use_container_width=True)
+                return archivo # Éxito
     return None
-
 # ==========================================
 # 🚪 5. LOGIN INTELIGENTE
 # ==========================================
