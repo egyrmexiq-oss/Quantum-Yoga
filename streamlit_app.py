@@ -100,7 +100,7 @@ def obtener_imagen_nube(url):
 
 #def mostrar_imagen_postura(texto_wendy):
     # ...
-
+import os # <--- Asegúrate de tener esto arriba del todo con los otros imports
 def mostrar_imagen_postura(texto_wendy):
     """
     Muestra imágenes locales (subidas a GitHub) si detecta la palabra clave.
