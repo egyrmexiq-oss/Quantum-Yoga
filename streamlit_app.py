@@ -142,79 +142,90 @@ tipo_plan = st.session_state.get("tipo_plan", "DEMO")
 nivel_seleccionado = "Básico" 
 
 # --- BARRA LATERAL ---
+# --- BARRA LATERAL COMPLETA (Reemplaza todo el bloque 'with st.sidebar:') ---
 with st.sidebar:
-    st.header("🧘 Wellness Flow")
-    st.caption(f"Plan: {tipo_plan}")
-    # 1. LOGO QUANTUM (Arriba de todo)
-    # Asegúrate de que el archivo 'logo_quantum.png' esté en tu GitHub
+    # 1. LOGO QUANTUM ⚛️ (Encabezado de Marca)
     try:
+        # Asegúrate de subir 'logo_quantum.png' a GitHub
         st.image("logo_quantum.png", use_container_width=True) 
     except:
-        st.header("Quantum Yoga ⚛️") # Texto de respaldo si falla la imagen
+        # Si falla la imagen, mostramos texto elegante
+        st.markdown("## Quantum Yoga ⚛️")
 
     st.markdown("---")
 
-    # 2. AVATAR DE WENDY (¿Video o Foto?)
+    # 2. TU INSTRUCTORA (Wendy) 🧘‍♀️
     st.markdown("**Tu Instructora:**")
     
-    # --- OPCIÓN A: VIDEO (El Retrato Viviente) ---
-    # Si quieres usar el video, descomenta estas lineas y comenta la de imagen:
-    # try:
-    #     st.video("wendy_intro.mp4", format="video/mp4", start_time=0, loop=True, autoplay=True, muted=True)
-    # except:
-    #     st.write("Wendy está meditando...")
-
-    # --- OPCIÓN B: FOTO (La Clásica) ---
+    # --- SECCIÓN DE IMAGEN O VIDEO ---
+    # (Para usar VIDEO: descomenta las líneas de st.video y comenta st.image)
     try:
+        # OPCIÓN A (VIDEO):
+        # st.video("wendy_intro.mp4", format="video/mp4", start_time=0, loop=True, autoplay=True, muted=True)
+        
+        # OPCIÓN B (FOTO - ACTIVA POR DEFECTO):
         st.image("Wendy v1.jpeg", caption="Wendy (IA)", use_container_width=True)
     except:
-        st.write("🧘‍♀️") # Icono si falla
+        st.write("🧘‍♀️") # Icono de respaldo
 
     st.markdown("---")
-    # SELECTOR DE NIVEL (Solo para Premium)
+    
+    # 3. DATOS DE SESIÓN 👤
+    st.caption(f"Hola, **{st.session_state.usuario_activo}**")
+    
+    # Lógica de Planes
     if tipo_plan == "PREMIUM":
-        st.markdown("### 🎚️ Nivel de Práctica")
+        st.success(f"💎 Plan: {tipo_plan}") # Etiqueta verde bonita
+        
+        st.markdown("### 🎚️ Intensidad")
         nivel_seleccionado = st.select_slider(
-            "Intensidad:", 
+            "Nivel de Práctica:", 
             options=["Básico", "Medio", "Avanzado"],
-            value="Básico"
+            value="Básico",
+            label_visibility="collapsed"
         )
-        if nivel_seleccionado == "Básico":
-            st.info("💡 Principiantes: Explicación detallada.")
-        elif nivel_seleccionado == "Avanzado":
-            st.info("🔥 Expertos: Sánscrito y reto.")
     else:
-        st.warning("🔒 Modo DEMO")
+        st.warning(f"🔒 Plan: {tipo_plan}")
         nivel_seleccionado = "DEMO"
 
     st.markdown("---")
+    
+    # 4. HERRAMIENTAS 🛠️
     usar_voz = st.toggle("🔊 Voz de Wendy", value=True)
     
-    if st.button("🔄 Nueva Sesión"):
+    if st.button("🔄 Nueva Sesión", use_container_width=True):
         st.session_state.mensajes = []
         st.rerun()
         
-    # BOTÓN PDF
+    # 5. ZONA DE DESCARGA PDF (¡CON LEYENDAS RECUPERADAS!) 📄
     if len(st.session_state.mensajes) > 1:
         st.markdown("---")
+        # 👇 AQUÍ ESTÁN LAS LEYENDAS QUE FALTABAN
+        st.markdown("### 📄 Tu Rutina")
+        st.caption("Descarga tu práctica personalizada para imprimir.")
+
         try:
             pdf_data = generar_pdf_yoga(st.session_state.usuario_activo, st.session_state.mensajes)
             b64 = base64.b64encode(pdf_data).decode()
+            
+            # Botón Estilizado
             href = f'''
-            <a href="data:application/octet-stream;base64,{b64}" download="Rutina_Wellness.pdf" 
-               style="text-decoration:none; color: #1B4D3E; background-color: #DAD7CD; 
-                      padding: 15px; border-radius: 10px; display: block; text-align: center; 
-                      border: 2px solid #A3B18A; font-weight: bold; margin-top: 10px;">
+            <a href="data:application/octet-stream;base64,{b64}" download="Rutina_Quantum.pdf" 
+               style="text-decoration:none; color: #1B4D3E; background-color: #E8F5E9; 
+                      padding: 12px; border-radius: 8px; display: block; text-align: center; 
+                      border: 1px solid #1B4D3E; font-weight: bold; width: 100%;">
                📥 DESCARGAR PDF
             </a>
             '''
             st.markdown(href, unsafe_allow_html=True)
-        except: pass
+        except Exception as e:
+            st.error(f"Error PDF: {e}")
 
     st.markdown("---")
-    if st.button("🔒 Salir"):
+    # Botón de Salir
+    if st.button("🔒 Cerrar Sesión", use_container_width=True):
         del st.session_state["usuario_activo"]
-        st.rerun()
+        st.rerun())
 
 # --- PROMPTS DE NIVELES ---
 if nivel_seleccionado == "DEMO":
