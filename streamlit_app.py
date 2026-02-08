@@ -50,7 +50,7 @@ st.markdown("""
     header[data-testid="stHeader"] { background-color: transparent !important; }
     </style>
     """, unsafe_allow_html=True)
-    st.markdown("---")
+    #st.markdown("---")
     # Contador de Visitas (Mentalidad de Crecimiento)
     st.markdown("""
     <div style="background-color: #2e1a47; padding: 10px; border-radius: 5px; text-align: center;">
